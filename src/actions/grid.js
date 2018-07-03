@@ -2,9 +2,22 @@
 
 
 export const SWAP_BLOCKS = 'SWAP_BLOCKS';
-export const swapBlocks  =(block, dir)=> ({
+export const swapBlocks  =(blockId, dir)=> ({
   type: SWAP_BLOCKS,
-  block,
+  blockId,
   dir
 });
 
+export const INSERT_BLOCK = 'INSERT_BLOCK';
+export const insertBlock =(position)=>({
+    type: INSERT_BLOCK,
+    position
+})
+
+
+export const DROP_BLOCK = 'DROP_BLOCK';
+export const dropBlock  =(position)=> ({
+  type: DROP_BLOCK,
+  position
+  
+});

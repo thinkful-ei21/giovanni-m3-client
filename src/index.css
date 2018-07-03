@@ -15,7 +15,8 @@ body {
 }
 
 .row {
-  display: block
+  display: block;
+  height: 66px
 
 }
 

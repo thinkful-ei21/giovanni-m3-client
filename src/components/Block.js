@@ -22,18 +22,16 @@ const Item = posed.div({
 export class Block extends Component{
     constructor(){
         super();
-        this.state = {        }
+        this.state = { direction: '' }
        }
 
 
     
-    // render() {
-    //     return <Box className="item" 
-    //             pose={this.state.isVisible ? 'visible' : 'hidden'}
-    //             />;
-    // }
-    
+    xVal;
+    yVal;
 
+    setX(x){this.xVal = x}
+    setY(y){this.yVal = y}
 
 
     drag(ev) {
@@ -42,13 +40,23 @@ export class Block extends Component{
         // ev.dataTransfer.setData("text", ev.target.id);
     }
 
-    moved(e){}
+
     
-    testClick(e){
-        // let id = e.target.id
-        // console.log(id)
-        // console.log(this.props.grid)
-        // this.props.dispatch(swapBlocks(id, 'left'))
+    getDirection(){
+        let id = this.props.id
+        console.log(id, this.xVal, this.yVal)
+        
+        if (Math.abs(Math.abs(this.xVal)-Math.abs(this.yVal)) >= 25){
+            let direction = ''
+            if(Math.abs(this.xVal) > Math.abs(this.yVal) && this.xVal > 0){direction='right'}
+            else if(Math.abs(this.xVal) > Math.abs(this.yVal) && this.xVal < 0){direction='left'}
+            else if(Math.abs(this.xVal) < Math.abs(this.yVal) && this.yVal > 0){direction='down'}
+            else if(Math.abs(this.xVal) < Math.abs(this.yVal) && this.yVal < 0){direction='up'}
+
+            this.props.dispatch(swapBlocks(id, direction))
+        }
+
+
     }
 
     render(){
@@ -57,10 +65,13 @@ export class Block extends Component{
             <Item hidden={this.props.isHidden} id={this.props.id} 
             value={this.props.id}
             className='item' onDragStart={e=>this.drag(e) }
-            onValueChange={{ x: x => console.log('x',x),
-                y: y => console.log('y',y)
+            // onValueChange={{ x: x => console.log('x',x),
+            //     y: y => console.log('y',y)
+            // }}
+            onValueChange={{ x: x => this.setX(x),
+            y: y => this.setY(y)
             }}
-            onDragEnd ={e=>this.testClick(e)}
+            onDragEnd ={()=>this.getDirection()}
 
             >{this.props.id}</Item>
         )
