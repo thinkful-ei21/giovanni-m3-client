@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+
+.item {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  border: 2px solid red;
+
+
+}
+
+.row {
+  display: block
+
+}
+
+.cell {
+  display: inline-block;
+  height: 65px;
+  width: 65px;
+  border: 2px solid black
+}
