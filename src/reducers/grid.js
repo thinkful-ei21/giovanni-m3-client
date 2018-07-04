@@ -1,5 +1,5 @@
 
-import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK} from '../actions/grid'
+import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK} from '../actions/grid'
 
 
 const initialState = {
@@ -13,6 +13,9 @@ const initialState = {
         21:null, 22:null, 23:null, 24:null,
         31:null, 32:null, 33:null, 34:null
     },
+    values:{
+        
+    },
     latestId: 99
 
 }
@@ -23,6 +26,10 @@ export default function reducer(state = initialState, action){
 
     function findPos(block){
         return Object.entries(state.positions).find(pair=> pair[1]===block)[0]
+    }
+
+    function getVal(pos){
+        return state.values[state.positions[pos]]
     }
 
     function findAdjacentPos(pos, dir){
@@ -41,10 +48,119 @@ export default function reducer(state = initialState, action){
             break;
         }
 
-        if( x<1 || y<1 || x>4 || y>3 )
-        { console.log('out of bounds', y,x)
+        if( x<1 || y<1 || x>4 || y>3 ){
             return 'out of bounds'}
         else {return `${y}${x}`}
+    }
+
+    function checkDir(pos, val, dir){
+        // console.log(pos, val, dir)
+        let posArr =[pos]
+        for (var i = 0; i < posArr.length; i++) {
+            let nextPose = findAdjacentPos(posArr[i], dir)
+            if(getVal(nextPose)===val){posArr.push(nextPose)}
+        }
+        // console.log(posArr)
+        return posArr
+    }
+
+
+
+
+
+    function checkGrid(){
+        let posList = Object.keys({...state.positions})
+
+        
+        for (let i = 0; i < posList.length; i++) {
+            let group = [posList[i]]
+            let val = getVal(posList[i])
+
+            
+            for (let n  = 0; n < group.length; n++) {
+                let left = checkDir(group[n], val, 'left')
+                let right = checkDir(group[n], val, 'right')
+                let up = checkDir(group[n], val, 'up')
+                let down = checkDir(group[n], val, 'down')
+
+                // console.log(group)
+                console.log(group[n], val, left.length, right.length, up.length, down.length)
+                if (left.length -1 + right.length -1 < 2 && up.length -1 + down.length -1 < 2 && n===0){
+                    
+                    group.splice(n,1)
+                    
+                }
+                else{
+                    if(left.length -1 + right.length -1 >= 2){
+                        left.forEach(p => group.includes(p)? {} : group.push(p))
+                        right.forEach(p => group.includes(p)? {} : group.push(p))
+                    }
+                    else if(up.length -1 + down.length -1 >= 2){
+                        up.forEach(p => group.includes(p)? {} : group.push(p))
+                        down.forEach(p => group.includes(p)? {} : group.push(p))
+                    }
+                }
+        
+            }
+            group.forEach(p => posList.includes(p)? posList.splice(posList.indexOf(p),1) : {} )
+            //seems to be working, need to wire up deletion and figure out when to call this
+            // group.length > 1 ?  console.log(val, group) : {}
+        }
+
+    }
+
+
+    function getSurrounding(pos){
+        // checkDir(pos, getVal(pos), 'left') remove this, it's for teting checkDir
+        
+        let y = parseInt(pos[0],10)
+        let x = parseInt(pos[1],10)
+
+        function outOfBounds(p){
+            // console.log(p, Object.keys(state.positions).includes(p) )
+            return Object.keys(state.positions).includes(p)
+        }
+
+        let xArr = [`${y}${x-2}`,`${y}${x-1}`,`${y}${x}`,`${y}${x+1}`,`${y}${x+2}`].filter(outOfBounds)
+        let yArr = [`${y-2}${x}`,`${y-1}${x}`,`${y}${x}`,`${y+1}${x}`,`${y+2}${x}`].filter(outOfBounds)
+
+        return [xArr, yArr]
+    }
+
+    function didMatch(pos1, pos2, newState){
+
+        const sur1 = getSurrounding(pos1)
+            .map(lArr =>{
+                return lArr.map(pos =>{
+                    return newState.values[newState.positions[pos]]
+                })
+            })
+        // console.log('surrounding:', sur1)
+        const sur2 = getSurrounding(pos2)
+            .map(lArr =>{
+                return lArr.map(pos =>{
+                    return newState.values[newState.positions[pos]]
+                })
+            })
+
+        let result = false
+
+        let testList = sur1[0].concat(['']).concat(sur1[1]).concat(['']).concat(sur2[0]).concat(['']).concat(sur2[1])
+        let v = ''
+        let count = 1
+        for (var i = 0; i < testList.length; i++) {
+            if(testList[i] === v){
+                count ++
+                // console.log(count)
+                count === 3 ? result = true : {}
+            }
+            else{
+                v = testList[i]
+                count = 1
+            }
+        }
+        
+        return result
     }
 
     if(action.type === SWAP_BLOCKS){
@@ -53,11 +169,16 @@ export default function reducer(state = initialState, action){
         // console.log (position1)
         let position2 = findAdjacentPos(position1, action.dir)
         
-        if(position2 ==='out of bounds'){return {...state}}
-        else{return {...state, positions: 
-               {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
+        let newState = {...state, positions: 
+            {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
             }
-        }
+
+        if(position2 ==='out of bounds'){return state}
+        else if(didMatch(position1, position2, newState)===false){
+
+            return state}
+        else{ 
+            return newState}
     }
 
     if(action.type === DROP_BLOCK){
@@ -71,11 +192,19 @@ export default function reducer(state = initialState, action){
     if(action.type === INSERT_BLOCK){
         //takes cell id, maybe block value
         let newId = state.latestId + 1
+        const val = Math.floor(Math.random() * (4 - 1 + 1)) + 1
         console.log('inserting', newId, 'at', action.position )
-        return {...state, latestId: newId, positions: {...state.positions , [action.position]: newId}}
+        return {...state, latestId: newId, 
+            positions: {...state.positions , [action.position]: newId},
+            values: {...state.values, [newId]:val}
+        }
 
     }
 
+    if(action.type === DELETE_BLOCK){
+
+        return {...state, positions: {...state.positions, [action.position]: null}}
+    }
 
 
     return state

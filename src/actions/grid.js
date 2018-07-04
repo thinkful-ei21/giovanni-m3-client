@@ -21,3 +21,9 @@ export const dropBlock  =(position)=> ({
   position
   
 });
+
+export const DELETE_BLOCK = 'DELETE_BLOCK';
+export const deleteBlock =(position)=> ({
+    type: DELETE_BLOCK,
+    position
+})

@@ -47,11 +47,16 @@ export class Cell extends React.Component {
 
     render(){
         
-        // console.log(this.props.grid)
+        // console.log(this.props.values)
       return (
         <div id={this.props.id} className={this.props.className}>
             
-            {this.props.grid[this.props.id] === null? <div></div> : (<Block id={this.props.grid[this.props.id]} className='block'/>) }
+            {this.props.grid[this.props.id] === null? <div></div> : 
+                (<Block id={this.props.grid[this.props.id]} 
+                    parId ={this.props.id}           
+                    value = {this.props.values[this.props.grid[this.props.id]]}
+                    className='block'/>) 
+            }
             {/* {this.state.insert}   */}
             {/* {this.props.grid[this.props.id]} */}
              {/* <Block id='a' className='block'/> */}
@@ -63,7 +68,8 @@ export class Cell extends React.Component {
 const mapStateToProps = state => {
     // console.log('mapping')
     return {
-        grid: state.grid.positions
+        grid: state.grid.positions,
+        values: state.grid.values
     };
   };
 

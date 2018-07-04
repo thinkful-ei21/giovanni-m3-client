@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import {spring} from 'popmotion';
 
-import {swapBlocks} from '../actions/grid';
+import {swapBlocks, deleteBlock} from '../actions/grid';
 import {toggleHidden} from '../actions/block';
 
 // const looseSpring = (props) =>
@@ -40,11 +40,14 @@ export class Block extends Component{
         // ev.dataTransfer.setData("text", ev.target.id);
     }
 
+    removeBlock(){
+        // this.props.dispatch(deleteBlock(this.props.parId))
+    }
 
     
     getDirection(){
         let id = this.props.id
-        console.log(id, this.xVal, this.yVal)
+        // console.log(id, this.xVal, this.yVal)
         
         if (Math.abs(Math.abs(this.xVal)-Math.abs(this.yVal)) >= 25){
             let direction = ''
@@ -55,15 +58,14 @@ export class Block extends Component{
 
             this.props.dispatch(swapBlocks(id, direction))
         }
-
-
     }
 
     render(){
-        // console.log(this.props.isHidden)
+        
+
         return (
             <Item hidden={this.props.isHidden} id={this.props.id} 
-            value={this.props.id}
+            value={this.props.value}
             className='item' onDragStart={e=>this.drag(e) }
             // onValueChange={{ x: x => console.log('x',x),
             //     y: y => console.log('y',y)
@@ -72,8 +74,10 @@ export class Block extends Component{
             y: y => this.setY(y)
             }}
             onDragEnd ={()=>this.getDirection()}
-
-            >{this.props.id}</Item>
+            onClick={()=> this.removeBlock()}
+            >
+                {this.props.value}
+            </Item>
         )
     }
 
