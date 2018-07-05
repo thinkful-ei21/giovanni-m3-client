@@ -15,7 +15,7 @@ export class Cell extends React.Component {
         // console.log('firing', this.props.grid[this.props.id])
         // this.props.dispatch(insertBlock(this.props.id))
         if(this.props.grid[this.props.id]===null){
-            console.log(this.props.id[0])
+            // console.log(this.props.id[0])
             if(this.props.id[0]==='1'){
                 // console.log('inserting')
                 this.props.dispatch(insertBlock(this.props.id))}

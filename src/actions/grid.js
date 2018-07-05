@@ -27,3 +27,8 @@ export const deleteBlock =(position)=> ({
     type: DELETE_BLOCK,
     position
 })
+
+export const CHECK_GRID = 'CHECK_GRID'
+export const checkGrid =()=>({
+    type: CHECK_GRID
+})

@@ -1,5 +1,5 @@
 
-import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK} from '../actions/grid'
+import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID,} from '../actions/grid'
 
 
 const initialState = {
@@ -16,6 +16,9 @@ const initialState = {
     values:{
         
     },
+    groups:[
+
+    ],
     latestId: 99
 
 }
@@ -69,9 +72,13 @@ export default function reducer(state = initialState, action){
 
 
     function checkGrid(){
-        let posList = Object.keys({...state.positions})
-
+        //returns false if block grid still updating, returns an array of match groups if matches found, otherwise returns empty array
         
+        if(Object.values(state.positions).includes(null)){return false}
+
+        let posList = Object.keys({...state.positions})
+        let groups = []
+
         for (let i = 0; i < posList.length; i++) {
             let group = [posList[i]]
             let val = getVal(posList[i])
@@ -83,8 +90,7 @@ export default function reducer(state = initialState, action){
                 let up = checkDir(group[n], val, 'up')
                 let down = checkDir(group[n], val, 'down')
 
-                // console.log(group)
-                console.log(group[n], val, left.length, right.length, up.length, down.length)
+                // console.log(group[n], val, left.length, right.length, up.length, down.length)
                 if (left.length -1 + right.length -1 < 2 && up.length -1 + down.length -1 < 2 && n===0){
                     
                     group.splice(n,1)
@@ -103,10 +109,13 @@ export default function reducer(state = initialState, action){
         
             }
             group.forEach(p => posList.includes(p)? posList.splice(posList.indexOf(p),1) : {} )
-            //seems to be working, need to wire up deletion and figure out when to call this
+            
             // group.length > 1 ?  console.log(val, group) : {}
-        }
 
+            groups.push(group)
+
+        }
+        return groups
     }
 
 
@@ -193,12 +202,23 @@ export default function reducer(state = initialState, action){
         //takes cell id, maybe block value
         let newId = state.latestId + 1
         const val = Math.floor(Math.random() * (4 - 1 + 1)) + 1
-        console.log('inserting', newId, 'at', action.position )
+        // console.log('inserting', newId, 'at', action.position )
         return {...state, latestId: newId, 
             positions: {...state.positions , [action.position]: newId},
             values: {...state.values, [newId]:val}
         }
 
+    }
+
+    if (action.type === CHECK_GRID){
+
+        // console.log('checking', state)
+        const groups = checkGrid()
+        if(groups === false || groups.length === 0){ return state}
+        else{
+            return {...state, groups: groups}
+
+        }
     }
 
     if(action.type === DELETE_BLOCK){

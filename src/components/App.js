@@ -4,6 +4,7 @@ import Block from './Block';
 import Row from './Row';
 
 import {toggleHidden} from '../actions/block'
+import { checkGrid, deleteBlock } from '../actions/grid';
 
 class App extends Component {
   constructor(){
@@ -13,7 +14,17 @@ class App extends Component {
   }
 
 
- 
+  componentDidUpdate(prevProps) {
+    // console.log('updated')
+    if (this.props.grid !== prevProps.grid) {
+        // console.log('firing')
+        this.props.dispatch(checkGrid());
+    }
+    if (this.props.groups !== prevProps.groups){
+      // console.log('deleting')
+      this.props.groups.forEach(g=> g.forEach(pos => this.props.dispatch(deleteBlock(pos))))
+    }
+}
 
   handleMouse(event){
    
@@ -94,7 +105,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-   isHidden: state.block.isHidden
+   isHidden: state.block.isHidden,
+   grid: state.grid.positions,
+   groups: state.grid.groups
   };
 };
 
