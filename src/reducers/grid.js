@@ -19,7 +19,8 @@ const initialState = {
     groups:[
 
     ],
-    latestId: 99
+    latestId: 99,
+    score: 0
 
 }
 
@@ -110,8 +111,7 @@ export default function reducer(state = initialState, action){
             }
             group.forEach(p => posList.includes(p)? posList.splice(posList.indexOf(p),1) : {} )
             
-            // group.length > 1 ?  console.log(val, group) : {}
-
+            // group.length > 1 ?  console.log(val, group) : {}      
             groups.push(group)
 
         }
@@ -216,7 +216,17 @@ export default function reducer(state = initialState, action){
         const groups = checkGrid()
         if(groups === false || groups.length === 0){ return state}
         else{
-            return {...state, groups: groups}
+
+            //temp score tracking
+            let tot = 0
+            groups.forEach(group => {
+                let points = 1
+                for (let n = 1; n <= group.length; n++) {
+                    points = points * n
+                }
+                tot = tot + points
+            })
+            return {...state, groups: groups, score: state.score+tot}
 
         }
     }

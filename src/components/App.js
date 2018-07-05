@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Block from './Block';
 import Row from './Row';
+import Score from './score'
 
 import {toggleHidden} from '../actions/block'
 import { checkGrid, deleteBlock } from '../actions/grid';
@@ -96,7 +97,10 @@ class App extends Component {
 
     return (
       <main onMouseUp={e => this.handleMouse(e)}>
-        {this.rows}
+        <div>
+          {this.rows}
+        </div>
+        <Score />
       </main>
 
     );
@@ -107,7 +111,8 @@ const mapStateToProps = state => {
   return {
    isHidden: state.block.isHidden,
    grid: state.grid.positions,
-   groups: state.grid.groups
+   groups: state.grid.groups,
+   points: state.grid.score
   };
 };
 
