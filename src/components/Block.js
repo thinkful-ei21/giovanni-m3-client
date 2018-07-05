@@ -74,7 +74,7 @@ export class Block extends Component{
             y: y => this.setY(y)
             }}
             onDragEnd ={()=>this.getDirection()}
-            onClick={()=> this.removeBlock()}
+            // onClick={()=> this.removeBlock()}
             >
                 {this.props.value}
             </Item>
