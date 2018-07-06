@@ -82,6 +82,27 @@ export const login = (username, password) => dispatch => {
   );
 };
 
+export const register = (username, password) => dispatch =>{
+  dispatch(authRequest());
+  return (
+    fetch(`${API_BASE_URL}/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    })
+    .then(res => {console.log(res.status)
+      res.status === 201 ? dispatch(login(username, password)): {}
+      return res} )
+    .then(res => normalizeResponseErrors(res))
+    .then(res => res.json())
+    .catch(err => dispatch(authError(err)))
+  )
+}
 
 export const refreshAuthToken = () => (dispatch, getState) => {
     dispatch(authRequest());

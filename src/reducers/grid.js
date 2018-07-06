@@ -20,7 +20,8 @@ const initialState = {
 
     ],
     latestId: 99,
-    score: 0
+    score: 0,
+    highScore: -1 
 
 }
 
