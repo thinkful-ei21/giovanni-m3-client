@@ -4,9 +4,8 @@ import Block from './Block';
 import Row from './Row';
 import Score from './score'
 
-
-import {toggleHidden} from '../actions/block'
 import { checkGrid, deleteBlock } from '../actions/grid';
+import { submitScore } from '../actions/auth';
 
 class Game extends Component {
   constructor(){
@@ -107,6 +106,9 @@ class Game extends Component {
           </button>)  :
           (<Score />)
         }
+        <button onClick={()=>this.props.dispatch(submitScore())}>
+            test
+          </button>
 
       </main>
 
@@ -116,7 +118,6 @@ class Game extends Component {
 
 const mapStateToProps = state => {
   return {
-   isHidden: state.block.isHidden,
    grid: state.grid.positions,
    groups: state.grid.groups,
    points: state.grid.score,

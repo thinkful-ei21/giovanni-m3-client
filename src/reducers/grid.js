@@ -1,5 +1,5 @@
 
-import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID,} from '../actions/grid'
+import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID, RESET_GAME, SET_HIGH} from '../actions/grid'
 
 
 const initialState = {
@@ -116,6 +116,9 @@ export default function reducer(state = initialState, action){
             groups.push(group)
 
         }
+        let matches = groups.filter(arr => arr.length > 0)
+        console.log('matches',matches.length)
+        if (matches.length === 0){console.log(checkGameOver())}
         return groups
     }
 
@@ -171,6 +174,34 @@ export default function reducer(state = initialState, action){
         }
         
         return result
+    }
+
+    function checkGameOver(){
+        let swapOptions = []
+        Object.keys(state.positions).forEach(pos1 =>{
+            findAdjacentPos(pos1, 'right') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'right')])
+            findAdjacentPos(pos1, 'down') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'down')])
+        })
+        // console.log(swapOptions)
+        for (let i = 0; i < swapOptions.length; i++) {
+            let pos1 = swapOptions[i][0]
+            let pos2 = swapOptions[i][1]
+            let newState = {...state, positions: 
+                {...state.positions, 
+                    [pos1]: state.positions[pos2], 
+                    [pos2] : state.positions[pos1] }
+                }
+            if(didMatch(pos1, pos2, newState)){
+                console.log(pos1, pos2)
+                return false
+            }
+        }
+        return true
+    }
+
+
+    if(action.type === RESET_GAME){
+
     }
 
     if(action.type === SWAP_BLOCKS){
@@ -237,6 +268,10 @@ export default function reducer(state = initialState, action){
         return {...state, positions: {...state.positions, [action.position]: null}}
     }
 
+    if(action.type === SET_HIGH){
+
+        return{...state, highScore: action.score}
+    }
 
     return state
 }

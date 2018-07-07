@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { API_BASE_URL } from '../config';
 import { normalizeResponseErrors } from './utils';
 import { saveAuthToken, clearAuthToken } from '../local-storage';
+import {setHigh} from '../actions/grid'
 
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const setAuthToken = authToken => ({
@@ -123,4 +124,46 @@ export const refreshAuthToken = () => (dispatch, getState) => {
         clearAuthToken(authToken);
       });
   };
+
+
+  export const submitScore = (score = 2222222) => (dispatch, getState) => {
+    const authToken = getState().auth.authToken;
+    return fetch(`${API_BASE_URL}/score`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        score: score
+      }
+      // ,
+      // body: JSON.stringify({
+      //   score
+      // })
+    })
+      .then(res => normalizeResponseErrors(res))
+      .then(res => res.json())
+      .then(res => {dispatch(setHigh(res.data))})
+      .catch(err => {
+        dispatch(authError(err));
+        dispatch(clearAuth());
+        clearAuthToken(authToken);
+      })
+  };
   
+
+  // export const submitScore = () => (dispatch, getState) => {
+  //   const authToken = getState().auth.authToken;
+  //   return fetch(`${API_BASE_URL}/score`, {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${authToken}`
+  //     }
+  //   })
+  //     .then(res => normalizeResponseErrors(res))
+  //     .then(res => res.json())
+  //     .then((res => console.log(res)))
+  //     .catch(err => {
+  //       dispatch(authError(err));
+  //       dispatch(clearAuth());
+  //       clearAuthToken(authToken);
+  //     })
+  // };

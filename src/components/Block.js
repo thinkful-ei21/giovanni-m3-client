@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {spring} from 'popmotion';
 
 import {swapBlocks, deleteBlock} from '../actions/grid';
-import {toggleHidden} from '../actions/block';
+
 
 // const looseSpring = (props) =>
 //   spring({ ...props, stiffness: 200, damping: 0 })
@@ -85,7 +85,6 @@ export class Block extends Component{
 
 const mapStateToProps = state => {
     return {
-        isHidden: state.block.isHidden,
         grid: state.grid.positions
     };
   };

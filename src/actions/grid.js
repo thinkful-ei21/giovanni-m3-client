@@ -32,3 +32,16 @@ export const CHECK_GRID = 'CHECK_GRID'
 export const checkGrid =()=>({
     type: CHECK_GRID
 })
+
+export const RESET_GAME = 'RESET_GAME'
+export const submitScore =()=> ({
+    type: RESET_GAME
+})
+
+export const SET_HIGH = 'SET_HIGH'
+export const setHigh =(score)=> ({
+    type: SET_HIGH,
+    score: score
+})
+
+
