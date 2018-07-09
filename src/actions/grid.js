@@ -1,6 +1,7 @@
 
 
 
+
 export const SWAP_BLOCKS = 'SWAP_BLOCKS';
 export const swapBlocks  =(blockId, dir)=> ({
   type: SWAP_BLOCKS,
@@ -14,6 +15,19 @@ export const insertBlock =(position)=>({
     position
 })
 
+export const SET_VALUE = 'SET_VALUE';
+export const setValue = (position, value)=>({
+    type: SET_VALUE,
+    position,
+    value
+})
+
+export const INC_VALUE = 'INC_VALUE'
+export const incrimentVal = (position, by) => ({
+    type: INC_VALUE,
+    position,
+    by
+})
 
 export const DROP_BLOCK = 'DROP_BLOCK';
 export const dropBlock  =(position)=> ({
@@ -34,7 +48,7 @@ export const checkGrid =()=>({
 })
 
 export const RESET_GAME = 'RESET_GAME'
-export const submitScore =()=> ({
+export const resetGame =()=> ({
     type: RESET_GAME
 })
 
@@ -44,4 +58,7 @@ export const setHigh =(score)=> ({
     score: score
 })
 
-
+export const CALC_SCORE = 'CALC_SCORE'
+export const calcScore =()=> ({
+    type: CALC_SCORE
+})

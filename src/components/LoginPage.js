@@ -25,8 +25,8 @@ export class LoginPage extends React.Component {
                     
                 <form onSubmit={e => this.onSubmit(e)}>
 
-                    <input   name="userName" id="userName" onChange={e => this.state.name=e.currentTarget.value} required />
-                    <input   name="password" id="password" type="password" onChange={e => this.state.password=e.currentTarget.value} min="10" required />
+                    <input   name="userName" id="userName" onChange={e => this.setState({name:e.currentTarget.value})} required />
+                    <input   name="password" id="password" type="password" onChange={e => this.setState({password:e.currentTarget.value})} min="10" required />
                 </form>
                 <button  name="LogIn" id="LogIn" className="button"
                  onClick={()=>this.props.dispatch(login(this.state.name,this.state.password))}

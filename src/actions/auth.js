@@ -126,7 +126,7 @@ export const refreshAuthToken = () => (dispatch, getState) => {
   };
 
 
-  export const submitScore = (score = 2222222) => (dispatch, getState) => {
+  export const submitScore = (score) => (dispatch, getState) => {
     const authToken = getState().auth.authToken;
     return fetch(`${API_BASE_URL}/score`, {
       method: 'POST',

@@ -4,8 +4,8 @@ import Block from './Block';
 import Row from './Row';
 import Score from './score'
 
-import { checkGrid, deleteBlock } from '../actions/grid';
-import { submitScore } from '../actions/auth';
+import { checkGrid, deleteBlock, resetGame, incrimentVal, calcScore } from '../actions/grid';
+import { submitScore, clearAuth } from '../actions/auth';
 
 class Game extends Component {
   constructor(){
@@ -14,80 +14,43 @@ class Game extends Component {
   
   }
 
+  mergeBlocks(group){
+    if(group.length > 0){
+       const by = group.length -2
+       const index = Math.floor(Math.random() * (group.length))
+       for (let i = 0; i < group.length; i++) {
+        //  console.log('randInd:', index, group[i], group)
+         if(i=== index){  this.props.dispatch(incrimentVal(group[i],by))  }
+         else{ this.props.dispatch(deleteBlock(group[i])) }
+       }
+      }
+  }
 
   componentDidUpdate(prevProps) {
     // console.log('updated')
     if (this.props.grid !== prevProps.grid) {
         // console.log('firing')
         this.props.dispatch(checkGrid());
+        this.props.dispatch(calcScore())
     }
-    if (this.props.groups !== prevProps.groups){
+    if (this.props.gameOver !== prevProps.gameOver && this.props.gameOver=== true){
+      console.log('game over', this.props.points)
+        this.props.dispatch(submitScore(this.props.points))
+    }
+    if (this.props.groups !== prevProps.groups && !Object.values(this.props.grid).includes(null) ){
       // console.log('deleting')
-      this.props.groups.forEach(g=> g.forEach(pos => this.props.dispatch(deleteBlock(pos))))
+      this.props.groups.forEach(g => this.mergeBlocks(g))
+      // this.props.groups.forEach(g=> g.forEach(pos => this.props.dispatch(deleteBlock(pos))))
+    }
+    if (this.props.userName !== prevProps.userName && this.props.userName !== null){
+      // console.log('something',this.props.userName.username)
+      this.props.dispatch(submitScore(this.props.points))
     }
 }
 
-  handleMouse(event){
-   
-      let  currentDroppable = null; // potential droppable that we're flying over right now
-      // moveAt(event.pageX, event.pageY);
-    
-
-      // console.log(this.props.isHidden)
-      // this.props.dispatch(toggleHidden())
-      // let elemBelow
-
-      // const waitForStore =()=>{
-      //   let found
-      //   try {
-      //     found = this.props.isHidden
-      //   } catch (error) {
-      //   }
-
-      //   if(found !== true){
-      //     setTimeout(waitForStore, 25)
-      //   }
-      //   else{
-      //     console.log(this.props.isHidden)
-      //     elemBelow = document.elementFromPoint(event.clientX, event.clientY)}
-      //     this.props.dispatch(toggleHidden())
-      // }
-
-      // waitForStore()
-
-      //let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-
-    
-    //here I have to hide and unhide the dragged obj
 
 
-
-    
-      // console.log(elemBelow)
-      // if (!elemBelow) return;
-    
-      // potential droppables are labeled with the class "droppable" (can be other logic)
-      // let droppableBelow = elemBelow.closest('.droppable');
-    
-      // if (currentDroppable != droppableBelow) { // if there are any changes
-      //   // we're flying in or out...
-      //   // note: both values can be null
-      //   //   currentDroppable=null if we were not over a droppable (e.g over an empty space)
-      //   //   droppableBelow=null if we're not over a droppable now, during this event
-    
-      //   if (currentDroppable) {
-      //     // the logic to process "flying out" of the droppable (remove highlight)
-      //     leaveDroppable(currentDroppable);
-      //   }
-      //   currentDroppable = droppableBelow;
-      //   if (currentDroppable) {
-      //     // the logic to process "flying in" of the droppable
-      //     enterDroppable(currentDroppable);
-      //   }
- 
-  }
-
-  rows = [1,2,3].map(n =>{
+  rows = [1,2,3,4,5].map(n =>{
     return(
       <Row id={`${n}`}/>
     )
@@ -96,19 +59,29 @@ class Game extends Component {
   render(){
 
     return (
-      <main onMouseUp={e => this.handleMouse(e)}>
+      <main>
         <div>
           {this.rows}
         </div>
         {this.props.userName === null ? 
           (<button onClick={()=>this.props.history.push('/login')}>
-            Log In
+            Log in to save high score
           </button>)  :
           (<Score />)
         }
-        <button onClick={()=>this.props.dispatch(submitScore())}>
-            test
+
+        {this.props.gameOver === true ?
+        (<div>Game over
+            <button onClick={()=>{this.props.dispatch(resetGame())}}>
+            Try Again?
           </button>
+        </div>)
+        : (<div> </div>)
+      }
+
+        <button onClick={()=>this.props.dispatch(clearAuth())}>
+            log out
+        </button>
 
       </main>
 
@@ -121,6 +94,7 @@ const mapStateToProps = state => {
    grid: state.grid.positions,
    groups: state.grid.groups,
    points: state.grid.score,
+   gameOver: state.grid.gameOver,
    userName: state.auth.currentUser
   };
 };

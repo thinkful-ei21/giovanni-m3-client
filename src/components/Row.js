@@ -11,7 +11,7 @@ export default function Row(props){
     //     console.log(data)
     //   }
 
-    let columns = [1,2,3,4].map(n =>{
+    let columns = [1,2,3,4,5,6,7].map(n =>{
         return(
         //   <div id={`${props.id}${n}`} className='cell'/>
           <Cell id={`${props.id}${n}`} className='cell'/>

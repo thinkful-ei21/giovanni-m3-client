@@ -1,17 +1,16 @@
 
-import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID, RESET_GAME, SET_HIGH} from '../actions/grid'
+import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID, RESET_GAME, SET_HIGH, SET_VALUE, INC_VALUE, CALC_SCORE} from '../actions/grid'
+import { value } from 'popmotion';
 
 
 const initialState = {
-    // positions: {
-    //     11:'11', 12:'12', 13:'13', 14:'14',
-    //     21:'21', 22:'22', 23:'23', 24:'24',
-    //     31:'31', 32:'32', 33:'33', 34:'34'
-    // },
+
     positions:{
-        11:null, 12:null, 13:null, 14:null,
-        21:null, 22:null, 23:null, 24:null,
-        31:null, 32:null, 33:null, 34:null
+        11:null, 12:null, 13:null, 14:null, 15:null, 16:null, 17:null,
+        21:null, 22:null, 23:null, 24:null, 25:null, 26:null, 27:null,
+        31:null, 32:null, 33:null, 34:null, 35:null, 36:null, 37:null,
+        41:null, 42:null, 43:null, 44:null, 45:null, 46:null, 47:null,
+        51:null, 52:null, 53:null, 54:null, 55:null, 56:null, 57:null
     },
     values:{
         
@@ -21,7 +20,8 @@ const initialState = {
     ],
     latestId: 99,
     score: 0,
-    highScore: -1 
+    highScore: -1,
+    gameOver: false
 
 }
 
@@ -32,8 +32,14 @@ export default function reducer(state = initialState, action){
     function findPos(block){
         return Object.entries(state.positions).find(pair=> pair[1]===block)[0]
     }
+    
+    function getId(pos){
+        return Object.entries(state.positions).find(pair=> pair[0]===pos)[1]
+    }
 
     function getVal(pos){
+        // const result =state.values[state.positions[pos]]
+        // if(result === NaN){console.log(pos, state)}
         return state.values[state.positions[pos]]
     }
 
@@ -53,7 +59,7 @@ export default function reducer(state = initialState, action){
             break;
         }
 
-        if( x<1 || y<1 || x>4 || y>3 ){
+        if( x<1 || y<1 || x>7 || y>5 ){
             return 'out of bounds'}
         else {return `${y}${x}`}
     }
@@ -117,8 +123,14 @@ export default function reducer(state = initialState, action){
 
         }
         let matches = groups.filter(arr => arr.length > 0)
-        console.log('matches',matches.length)
-        if (matches.length === 0){console.log(checkGameOver())}
+        // console.log('matches',matches.length)
+        if (matches.length === 0){
+            const gameOver =checkGameOver()
+            if(gameOver){
+                groups = 'Game Over'
+
+            } 
+        }
         return groups
     }
 
@@ -192,16 +204,28 @@ export default function reducer(state = initialState, action){
                     [pos2] : state.positions[pos1] }
                 }
             if(didMatch(pos1, pos2, newState)){
-                console.log(pos1, pos2)
+                // console.log(pos1, pos2)
                 return false
             }
         }
         return true
     }
 
+    if(action.type === INC_VALUE){
+        // console.log(action.by)
+        const newVal = getVal(action.position) + action.by
+        // console.log('incrimenting from ',getVal(action.position),'to ', newVal, 'at', action.position)
+        const pos = getId(action.position)
+
+        return {...state, values: {...state.values, [pos]: newVal}}
+    }
+
+    if(action.type === SET_VALUE){
+        return {...state, values: {...state.values, [getId(action.position)]: action.value}}
+    }
 
     if(action.type === RESET_GAME){
-
+        return {...initialState, highScore:state.highScore}
     }
 
     if(action.type === SWAP_BLOCKS){
@@ -223,6 +247,7 @@ export default function reducer(state = initialState, action){
     }
 
     if(action.type === DROP_BLOCK){
+        // console.log('drop to ', action.position)
         let position1 = action.position
         let position2 = findAdjacentPos(position1, 'up')
         return {...state, positions: 
@@ -247,25 +272,29 @@ export default function reducer(state = initialState, action){
         // console.log('checking', state)
         const groups = checkGrid()
         if(groups === false || groups.length === 0){ return state}
+        else if(groups === 'Game Over'){
+            return {...state, gameOver: true}
+        }
         else{
-
-            //temp score tracking
-            let tot = 0
-            groups.forEach(group => {
-                let points = 1
-                for (let n = 1; n <= group.length; n++) {
-                    points = points * n
-                }
-                tot = tot + points
-            })
-            return {...state, groups: groups, score: state.score+tot}
-
+            return {...state, groups: groups}
         }
     }
 
     if(action.type === DELETE_BLOCK){
+        // console.log('deleting id ', state.positions[action.position])
+        let newVals = {...state.values}
 
-        return {...state, positions: {...state.positions, [action.position]: null}}
+        delete newVals[`${state.positions[action.position]}`]
+        // console.log(newVals)
+        return {...state, positions: {...state.positions, [action.position]: null}, values: newVals}
+    }
+
+    if(action.type === CALC_SCORE){
+        const vals = Object.values(state.values)
+        // console.log(vals)
+        let highest = 0
+        vals.forEach(v => v > highest ? highest = v :{})
+        return {...state, score: highest}
     }
 
     if(action.type === SET_HIGH){
