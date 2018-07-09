@@ -12,7 +12,7 @@ import {swapBlocks, deleteBlock} from '../actions/grid';
 
 const Item = posed.div({
     draggable: true,
-    dragBounds: { left: -50, right: 50, top: -50, bottom: 50 },
+    dragBounds: { left: -60, right: 60, top: -60, bottom: 60 },
     dragEnd: {transition: spring }
 });
 
@@ -34,15 +34,6 @@ export class Block extends Component{
     setY(y){this.yVal = y}
 
 
-    drag(ev) {
-        // console.log(ev.target.id)
-        // this.props.dispatch(toggleHidden())
-        // ev.dataTransfer.setData("text", ev.target.id);
-    }
-
-    removeBlock(){
-        // this.props.dispatch(deleteBlock(this.props.parId))
-    }
 
     
     getDirection(){
@@ -64,9 +55,9 @@ export class Block extends Component{
         
 
         return (
-            <Item hidden={this.props.isHidden} id={this.props.id} 
+            <Item  id={this.props.id} 
             value={this.props.value}
-            className='item' onDragStart={e=>this.drag(e) }
+            className='item'
             // onValueChange={{ x: x => console.log('x',x),
             //     y: y => console.log('y',y)
             // }}
