@@ -204,7 +204,7 @@ export default function reducer(state = initialState, action){
                     [pos2] : state.positions[pos1] }
                 }
             if(didMatch(pos1, pos2, newState)){
-                // console.log(pos1, pos2)
+                console.log(pos1, pos2)
                 return false
             }
         }
@@ -258,8 +258,23 @@ export default function reducer(state = initialState, action){
     if(action.type === INSERT_BLOCK){
         //takes cell id, maybe block value
         let newId = state.latestId + 1
-        const val = Math.floor(Math.random() * (4 - 1 + 1)) + 1
-        // console.log('inserting', newId, 'at', action.position )
+
+        let min = Infinity
+        let max = 0
+
+        Object.values(state.values).forEach(v => {
+            v > max ? max = v : {}
+            v < min ? min = v : {}
+        })
+
+        // this is sub-optimal in that it might return a low number if an extremely big combo occurs, but maybe that's fine?
+        if(Object.values(state.values).length < 15){
+            max = 4
+            min = 1
+        }
+
+        const val = Math.floor(Math.random() * (max - min +1)) + min
+        // console.log('inserting', val, 'at', action.position )
         return {...state, latestId: newId, 
             positions: {...state.positions , [action.position]: newId},
             values: {...state.values, [newId]:val}

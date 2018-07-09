@@ -16,11 +16,11 @@ class Game extends Component {
 
   mergeBlocks(group){
     if(group.length > 0){
-       const by = group.length -2
+       const by = group.length -3
        const index = Math.floor(Math.random() * (group.length))
        for (let i = 0; i < group.length; i++) {
         //  console.log('randInd:', index, group[i], group)
-         if(i=== index){  this.props.dispatch(incrimentVal(group[i],by))  }
+         if(i=== index && by > 0){  this.props.dispatch(incrimentVal(group[i],by))  }
          else{ this.props.dispatch(deleteBlock(group[i])) }
        }
       }
