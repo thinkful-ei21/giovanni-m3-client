@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 import Game from './Game';
 import LoginPage from './LoginPage';
+import Test from './test'
 
 export class App extends React.Component {
     constructor(){
@@ -13,7 +14,7 @@ export class App extends React.Component {
     render(){
 
         return(
-            <div className="app">
+            <div className="app container">
                 <Route exact path="/" component={Game} />
                 <Route exact path="/login" component={LoginPage} />
             </div>

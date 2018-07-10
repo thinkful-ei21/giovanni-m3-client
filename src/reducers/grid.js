@@ -250,6 +250,7 @@ export default function reducer(state = initialState, action){
         // console.log('drop to ', action.position)
         let position1 = action.position
         let position2 = findAdjacentPos(position1, 'up')
+        // console.log(state.positions[position2])
         return {...state, positions: 
             {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
         }
@@ -273,7 +274,7 @@ export default function reducer(state = initialState, action){
             min = 1
         }
 
-        const val = Math.floor(Math.random() * (max - min +1)) + min
+        const val = Math.floor(Math.random() * (max - min)) + min
         // console.log('inserting', val, 'at', action.position )
         return {...state, latestId: newId, 
             positions: {...state.positions , [action.position]: newId},

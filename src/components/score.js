@@ -10,11 +10,20 @@ export class Score extends React.Component {
 
     render(){
 
+
+
+        
         return(
-            <div>
-                points: {this.props.score}
-                High Score: {this.props.score > this.props.highScore ? this.props.score : this.props.highScore}   
-            </div>
+           
+               [ <div className="score  btn-lg btn-info">
+                    High#: 
+                    <span className="badge">{this.props.score}</span>
+                </div>,
+                <div className="score high-score btn-lg btn-info">
+                    Best: 
+                    <span className="badge">{this.props.score > this.props.highScore ? this.props.score : this.props.highScore}</span>
+        </div> ]
+            
             
         )    
     }

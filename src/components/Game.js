@@ -7,10 +7,17 @@ import Score from './score'
 import { checkGrid, deleteBlock, resetGame, incrimentVal, calcScore } from '../actions/grid';
 import { submitScore, clearAuth } from '../actions/auth';
 
+import posed, { PoseGroup } from 'react-pose';
+
+const Container = posed.ul(containerConfig)
+const containerConfig = {
+  }
+
+
 class Game extends Component {
   constructor(){
    super();
-   this.state = {}
+   this.state = { blocklist:[]}
   
   }
 
@@ -26,10 +33,22 @@ class Game extends Component {
       }
   }
 
+
+
   componentDidUpdate(prevProps) {
     // console.log('updated')
     if (this.props.grid !== prevProps.grid) {
         // console.log('firing')
+
+        // this.setState({blocklist: Object.entries(this.props.grid).map((pair,index) => {
+        //   if(pair[1]===null){
+        //     // return <Block  value={null} id={pair[0]} data-key={index} key={pair[index]} />
+        //   }
+        //   else{
+        //     return <Block id = {pair[1]} value={this.props.values[pair[1]]} data-key={index} key={index}    /> 
+        //   }
+        // })})
+
         this.props.dispatch(checkGrid());
         this.props.dispatch(calcScore())
     }
@@ -56,22 +75,29 @@ class Game extends Component {
     )
   })
   
+  
+
   render(){
+
 
     return (
       <main>
         <div>
           {this.rows}
         </div>
-        {this.props.userName === null ? 
-          (<button onClick={()=>this.props.history.push('/login')}>
-            Log in to save high score
-          </button>)  :
-          (<Score />)
-        }
-
+        <div className="info">
+          <Score />
+          {this.props.userName === null ? 
+            (<button className="btn btn-lg btn-info login" onClick={()=>this.props.history.push('/login')}>
+              Log in
+            </button>)  :
+            (<button className="btn btn-lg btn-info login" onClick={()=>this.props.dispatch(clearAuth())}>
+              log out
+            </button>)
+          }
+        </div>
         {this.props.gameOver === true ?
-        (<div>Game over
+        (<div className="game-over">Game over
             <button onClick={()=>{this.props.dispatch(resetGame())}}>
             Try Again?
           </button>
@@ -79,10 +105,18 @@ class Game extends Component {
         : (<div> </div>)
       }
 
-        <button onClick={()=>this.props.dispatch(clearAuth())}>
-            log out
-        </button>
-
+        {/* <Container className='container'>
+          <PoseGroup>
+            {Object.entries(this.props.grid).map((pair,index) => {
+                if(pair[1]===null){
+                   // return <Block  value={null} id={pair[0]} data-key={index} key={pair[index]} />
+                }
+                else{
+                  return <Block id = {pair[1]} value={this.props.values[pair[1]]} data-key={index} key={index}    /> 
+                }
+              })}
+          </PoseGroup>
+        </Container> */}
       </main>
 
     );
@@ -92,10 +126,12 @@ class Game extends Component {
 const mapStateToProps = state => {
   return {
    grid: state.grid.positions,
+   values: state.grid.values,
    groups: state.grid.groups,
    points: state.grid.score,
    gameOver: state.grid.gameOver,
-   userName: state.auth.currentUser
+   userName: state.auth.currentUser,
+   blocklist:[]
   };
 };
 

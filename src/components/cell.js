@@ -49,7 +49,7 @@ export class Cell extends React.Component {
         
         // console.log(this.props.values)
       return (
-        <div id={this.props.id} className={this.props.className}>
+        <div id={this.props.id} className={`${this.props.className} `}>
             
             {this.props.grid[this.props.id] === null? <div></div> : 
                 (<Block id={this.props.grid[this.props.id]} 
