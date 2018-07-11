@@ -14,7 +14,7 @@ export class App extends React.Component {
     render(){
 
         return(
-            <div className="app container">
+            <div className="app">
                 <Route exact path="/" component={Game} />
                 <Route exact path="/login" component={LoginPage} />
             </div>

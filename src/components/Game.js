@@ -98,7 +98,7 @@ class Game extends Component {
         </div>
         {this.props.gameOver === true ?
         (<div className="game-over">Game over
-            <button onClick={()=>{this.props.dispatch(resetGame())}}>
+            <button className="game-over-button" onClick={()=>{this.props.dispatch(resetGame())}}>
             Try Again?
           </button>
         </div>)

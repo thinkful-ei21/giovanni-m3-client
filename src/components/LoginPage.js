@@ -17,6 +17,11 @@ export class LoginPage extends React.Component {
         }
     }
 
+    onSubmit(e){
+        e.preventDefault()
+        this.props.dispatch(login(this.state.name,this.state.password))
+    }
+
     render(){
 
         if(this.state.redirect){return <Redirect to='/'/>} else {
@@ -25,15 +30,21 @@ export class LoginPage extends React.Component {
                     
                 <form onSubmit={e => this.onSubmit(e)}>
 
-                    <input   name="userName" id="userName" onChange={e => this.setState({name:e.currentTarget.value})} required />
-                    <input   name="password" id="password" type="password" onChange={e => this.setState({password:e.currentTarget.value})} min="10" required />
+                    <input  className="input-field" name="userName" id="userName"  type="text"
+                    placeholder="User Name"                    
+                    onChange={e => this.setState({name:e.currentTarget.value})} />
+                   
+                    <input className="input-field"  name="password" id="password" type="password"
+                    placeholder="Password"
+                    onChange={e => this.setState({password:e.currentTarget.value})} min="10" required />
                 </form>
-                <button  name="LogIn" id="LogIn" className="button"
-                 onClick={()=>this.props.dispatch(login(this.state.name,this.state.password))}
+                <button  name="LogIn" id="LogIn" className="login submit-button"
+                 onClick={(e)=>this.onSubmit(e)}
                  >
-                    LogIn
+                    Log In
                 </button>
-                <button  name="register" id="register" className="button"
+                OR
+                <button  name="register" id="register" className="login submit-button"
                 onClick={()=>{
                     console.log(this.state.name)
                     this.props.dispatch(register(this.state.name,this.state.password))}
