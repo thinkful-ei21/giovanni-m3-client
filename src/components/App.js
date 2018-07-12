@@ -4,6 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 import Game from './Game';
 import LoginPage from './LoginPage';
 import Test from './test'
+import { NavBar } from './navbar';
 
 export class App extends React.Component {
     constructor(){
@@ -13,12 +14,14 @@ export class App extends React.Component {
        
     render(){
 
-        return(
+        return([
+            <NavBar/>,
             <div className="app">
+                
                 <Route exact path="/" component={Game} />
                 <Route exact path="/login" component={LoginPage} />
             </div>
-        )    
+        ])    
     }
 }
 

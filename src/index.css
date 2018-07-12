@@ -12,19 +12,21 @@ body {
   margin-right: auto;
   margin-left: auto;
   max-width: 540px;
+  
 }
 
 main {
+  display: block;
   box-sizing: border-box;
   width: 96%;
-  padding-top: 10%;
+  padding-top: 5%;
   margin-left: 2%;
   margin-right: 2%;
 }
 
 .info{
   box-sizing: border-box;
-  margin-top: 10%;
+  margin-top: 5%;
   display: flex;
 }
 
@@ -287,4 +289,136 @@ main {
   width: auto;
   min-width: 110px;
   
+}
+
+.error-message {
+  display: block;
+  overflow-wrap: normal;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 1.4em;
+  text-shadow: black 1px 1px;
+  font-weight: 400;
+  margin-top: 40px;
+  margin-right: auto;
+  margin-left: auto;
+  background: #d1170a;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5),
+  10px 10px 15px rgba(0,0,0,0.5),
+  -1px -1px 30px rgba(0,0,0,0.2);
+
+}
+
+.navbar {
+  min-height: 45px;
+  width: 100%;
+  background: #11a8ab;
+  border: 2px solid black;
+}
+
+.navbar > button {
+  float: right;
+  background: #11a8ab;
+  border: 0px;
+}
+
+.navbar button:hover {
+  cursor: pointer;
+}
+
+.navbar div {
+  width: 35px;
+  height: 5px;
+  background-color: black;
+  margin: 6px 0;
+
+}
+.navbar ul {
+  display: block;
+  padding: 0;
+  list-style-type: none;
+  text-align: right;
+  font-size: 30px;
+  color: white;
+  text-shadow: black 3px 3px;
+  font-weight: 400;
+}
+
+.navbar li  {
+
+  /* position: relative; */
+  width: 100%;
+  min-height: 45px;
+  width: 100%;
+  background: #11a8ab;
+
+
+}
+
+.nav-link{
+  border: none;
+  background: #11a8ab;
+  text-align: right;
+  font-size: 30px;
+  color: white;
+  text-shadow: black 3px 3px;
+  font-weight: 400;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+}
+
+.about-text li{
+  text-align: center;
+  font-size: .6em;
+  text-shadow: black 1px 1px;
+  padding:1%;
+  min-height: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media only screen and (min-width : 425px) {
+  .navbar ul {
+    display: flex; justify-content: space-between;
+    margin: 0;
+    margin-right: 3%;
+    margin-left: 3%;
+    list-style-type: none;
+    padding: 0;
+    
+  }
+
+  .navbar > button{
+    display: none;
+  }
+  .navbar >ul>li {
+    display: inline;
+    width: auto;
+  }
+
+  .about-text li{
+
+    text-align: right;
+    font-size: .6em;
+    text-shadow: black 1px 1px;
+    padding:1%;
+    min-height: 20px;
+    width: 100%;
+  }
+
+  /* .about-text ul {
+    display: flex;
+    flex-direction: column;
+  } */
+
+  .hidden {
+    display: none;
+  }
 }

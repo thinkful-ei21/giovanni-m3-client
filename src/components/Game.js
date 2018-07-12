@@ -4,8 +4,9 @@ import Block from './Block';
 import Row from './Row';
 import Score from './score'
 
+
 import { checkGrid, deleteBlock, resetGame, incrimentVal, calcScore } from '../actions/grid';
-import { submitScore, clearAuth } from '../actions/auth';
+import { submitScore, logOut } from '../actions/auth';
 
 import posed, { PoseGroup } from 'react-pose';
 
@@ -91,7 +92,7 @@ class Game extends Component {
             (<button className="btn btn-lg btn-info login" onClick={()=>this.props.history.push('/login')}>
               Log in
             </button>)  :
-            (<button className="btn btn-lg btn-info login" onClick={()=>this.props.dispatch(clearAuth())}>
+            (<button className="btn btn-lg btn-info login" onClick={()=>this.props.dispatch(logOut())}>
               log out
             </button>)
           }
