@@ -49,10 +49,10 @@ export class Cell extends React.Component {
         
         // console.log(this.props.values)
       return (
-        <div id={this.props.id} className={`${this.props.className} `}>
+        <div id={this.props.id} key={this.props.id} className={`${this.props.className} `}>
             
             {this.props.grid[this.props.id] === null? <div></div> : 
-                (<Block id={this.props.grid[this.props.id]} 
+                (<Block id={this.props.grid[this.props.id]} key={this.props.grid[this.props.id]}
                     parId ={this.props.id}           
                     value = {this.props.values[this.props.grid[this.props.id]]}
                     className='block'/>) 

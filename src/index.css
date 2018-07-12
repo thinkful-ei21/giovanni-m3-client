@@ -339,6 +339,7 @@ main {
 .navbar ul {
   display: block;
   padding: 0;
+  margin: 0;
   list-style-type: none;
   text-align: right;
   font-size: 30px;
@@ -385,38 +386,57 @@ main {
 }
 
 @media only screen and (min-width : 425px) {
-  .navbar ul {
-    display: flex; justify-content: space-between;
+
+  .navbar > button{
+    display: none;
+  }
+
+  .navbar > .menu {
+    display: flex;
+    justify-content: space-between;
     margin: 0;
     margin-right: 3%;
     margin-left: 3%;
     list-style-type: none;
     padding: 0;
-    
+    font-size: 30px;
+    color: white;
+    text-shadow: black 3px 3px;
+    font-weight: 400;
+    line-height: 1.5;
   }
 
-  .navbar > button{
-    display: none;
-  }
-  .navbar >ul>li {
-    display: inline;
+
+  .navbar .menu {
+    display: flex;
     width: auto;
+
   }
 
-  .about-text li{
+  .about-text{
+    display: inline;
+  }
 
+  .about-text .about{
+    
     text-align: right;
     font-size: .6em;
     text-shadow: black 1px 1px;
-    padding:1%;
+    /* padding:1%; */
     min-height: 20px;
     width: 100%;
+    margin: 0%;
+    padding: 0%;
   }
 
-  /* .about-text ul {
-    display: flex;
-    flex-direction: column;
-  } */
+  .navbar ul{
+    padding-left: 1%;
+    padding-right: 1%;
+  }
+
+  .about-text li{
+    padding: 0px;
+  }
 
   .hidden {
     display: none;

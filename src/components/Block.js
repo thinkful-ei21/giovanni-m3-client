@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import posed, { PoseGroup } from 'react-pose';
+import posed from 'react-pose';
 import { connect } from 'react-redux';
 
 import {spring, tween} from 'popmotion';
 
-import {swapBlocks, deleteBlock, insertBlock, dropBlock} from '../actions/grid';
+import {swapBlocks, insertBlock, dropBlock} from '../actions/grid';
 
 
 // const looseSpring = (props) =>
@@ -94,6 +94,7 @@ export class Block extends Component{
         return (
             
             <Item  id={this.props.id} 
+            key={this.props.id}
             value={this.props.value}
             className={`item item-${color} btn btn-lg btn-default ${this.state.dragging ? 'dragging' : ''}` }
             // onValueChange={{ x: x => console.log('x',x),
@@ -108,7 +109,7 @@ export class Block extends Component{
                 this.getDirection()}}
             // onClick={()=> this.removeBlock()}
             >
-                <div class="item-value"> {this.props.value} </div>
+                <div className="item-value"> {this.props.value} </div>
             </Item>
         )
     }

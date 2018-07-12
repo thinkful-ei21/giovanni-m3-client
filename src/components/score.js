@@ -14,16 +14,17 @@ export class Score extends React.Component {
 
         
         return(
-           
-               [ <div className="score  btn-lg btn-info">
+           <React.Fragment >
+                <div className="score  btn-lg btn-info">
                     High#: 
                     <span className="badge">{this.props.score}</span>
-                </div>,
+                </div>
+
                 <div className="score high-score btn-lg btn-info">
                     Best: 
                     <span className="badge">{this.props.score > this.props.highScore ? this.props.score : this.props.highScore}</span>
-        </div> ]
-            
+        </div> 
+            </React.Fragment>
             
         )    
     }

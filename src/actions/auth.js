@@ -72,11 +72,11 @@ export const login = (username, password) => dispatch => {
       .then(({ authToken }) => storeAuthInfo(authToken, dispatch))
       .then(()=> dispatch(submitScore(0)))
       .catch(err => {
-        const { code } = err;
-        const message =
-          code === 401
-            ? 'Incorrect username or password'
-            : 'Unable to login, please try again';
+        // const { code } = err;
+        // const message =
+        //   code === 401
+        //     ? 'Incorrect username or password'
+        //     : 'Unable to login, please try again';
         dispatch(authError(err));
         // Could not authenticate, so return a SubmissionError for Redux
         // Form
@@ -103,7 +103,8 @@ export const register = (username, password) => dispatch =>{
       })
     })
     .then(res => {console.log(res.status)
-      res.status === 201 ? dispatch(login(username, password)): {}
+      if(res.status === 201){dispatch(login(username, password))}
+      // res.status === 201 ? dispatch(login(username, password)): {}
       return res} )
     .then(res => normalizeResponseErrors(res))
     .then(res => res.json())

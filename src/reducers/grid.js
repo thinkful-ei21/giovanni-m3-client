@@ -1,6 +1,6 @@
 
 import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID, RESET_GAME, SET_HIGH, SET_VALUE, INC_VALUE, CALC_SCORE} from '../actions/grid'
-import { value } from 'popmotion';
+
 
 
 const initialState = {
@@ -57,6 +57,7 @@ export default function reducer(state = initialState, action){
             break;
             case 'down': y = y+1
             break;
+            default:
         }
 
         if( x<1 || y<1 || x>7 || y>5 ){
@@ -177,7 +178,7 @@ export default function reducer(state = initialState, action){
             if(testList[i] === v){
                 count ++
                 // console.log(count)
-                count === 3 ? result = true : {}
+                if(count === 3){result = true}
             }
             else{
                 v = testList[i]
@@ -191,8 +192,10 @@ export default function reducer(state = initialState, action){
     function checkGameOver(){
         let swapOptions = []
         Object.keys(state.positions).forEach(pos1 =>{
-            findAdjacentPos(pos1, 'right') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'right')])
-            findAdjacentPos(pos1, 'down') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'down')])
+            if(findAdjacentPos(pos1, 'right') !== 'out of bounds'){swapOptions.push([pos1, findAdjacentPos(pos1, 'right')])}
+            if(findAdjacentPos(pos1, 'down') !== 'out of bounds'){swapOptions.push([pos1, findAdjacentPos(pos1, 'down')])}
+            // findAdjacentPos(pos1, 'right') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'right')])
+            // findAdjacentPos(pos1, 'down') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'down')])
         })
         // console.log(swapOptions)
         for (let i = 0; i < swapOptions.length; i++) {
@@ -230,7 +233,7 @@ export default function reducer(state = initialState, action){
 
     if(action.type === SWAP_BLOCKS){
         // console.log('blockId:', action.blockId, action.dir)
-        let position1 = findPos(parseInt(action.blockId),10)
+        let position1 = findPos(parseInt(action.blockId,10))
         // console.log (position1)
         let position2 = findAdjacentPos(position1, action.dir)
         
@@ -264,8 +267,10 @@ export default function reducer(state = initialState, action){
         let max = 0
 
         Object.values(state.values).forEach(v => {
-            v > max ? max = v : {}
-            v < min ? min = v : {}
+            if(v > max){max = v}
+            if(v < min){min = v}
+            // v > max ? max = v : {}
+            // v < min ? min = v : {}
         })
 
         // this is sub-optimal in that it might return a low number if an extremely big combo occurs, but maybe that's fine?

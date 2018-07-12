@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Block from './Block';
 import Row from './Row';
 import Score from './score'
 
@@ -8,11 +7,6 @@ import Score from './score'
 import { checkGrid, deleteBlock, resetGame, incrimentVal, calcScore } from '../actions/grid';
 import { submitScore, logOut } from '../actions/auth';
 
-import posed, { PoseGroup } from 'react-pose';
-
-const Container = posed.ul(containerConfig)
-const containerConfig = {
-  }
 
 
 class Game extends Component {
@@ -39,16 +33,6 @@ class Game extends Component {
   componentDidUpdate(prevProps) {
     // console.log('updated')
     if (this.props.grid !== prevProps.grid) {
-        // console.log('firing')
-
-        // this.setState({blocklist: Object.entries(this.props.grid).map((pair,index) => {
-        //   if(pair[1]===null){
-        //     // return <Block  value={null} id={pair[0]} data-key={index} key={pair[index]} />
-        //   }
-        //   else{
-        //     return <Block id = {pair[1]} value={this.props.values[pair[1]]} data-key={index} key={index}    /> 
-        //   }
-        // })})
 
         this.props.dispatch(checkGrid());
         this.props.dispatch(calcScore())
@@ -72,7 +56,7 @@ class Game extends Component {
 
   rows = [1,2,3,4,5].map(n =>{
     return(
-      <Row id={`${n}`}/>
+      <Row id={`${n}`} key={`row-${n}`}/>
     )
   })
   
@@ -87,7 +71,7 @@ class Game extends Component {
           {this.rows}
         </div>
         <div className="info">
-          <Score />
+          <Score key="score-component"/>
           {this.props.userName === null ? 
             (<button className="btn btn-lg btn-info login" onClick={()=>this.props.history.push('/login')}>
               Log in
