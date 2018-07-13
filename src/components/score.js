@@ -10,9 +10,6 @@ export class Score extends React.Component {
 
     render(){
 
-
-
-        
         return(
            <React.Fragment >
                 <div className="score  btn-lg btn-info">
@@ -23,15 +20,13 @@ export class Score extends React.Component {
                 <div className="score high-score btn-lg btn-info">
                     Best: 
                     <span className="badge">{this.props.score > this.props.highScore ? this.props.score : this.props.highScore}</span>
-        </div> 
-            </React.Fragment>
-            
+                </div> 
+            </React.Fragment>  
         )    
     }
 }
 
 const mapStateToProps = state => {
-    // console.log('mapping')
     return {
         score: state.grid.score,
         highScore: state.grid.highScore

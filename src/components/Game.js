@@ -31,7 +31,6 @@ class Game extends Component {
 
 
   componentDidUpdate(prevProps) {
-    // console.log('updated')
     if (this.props.grid !== prevProps.grid) {
 
         this.props.dispatch(checkGrid());
@@ -42,12 +41,9 @@ class Game extends Component {
         this.props.dispatch(submitScore(this.props.points))
     }
     if (this.props.groups !== prevProps.groups && !Object.values(this.props.grid).includes(null) ){
-      // console.log('deleting')
       this.props.groups.forEach(g => this.mergeBlocks(g))
-      // this.props.groups.forEach(g=> g.forEach(pos => this.props.dispatch(deleteBlock(pos))))
     }
     if (this.props.userName !== prevProps.userName && this.props.userName !== null){
-      // console.log('something',this.props.userName.username)
       this.props.dispatch(submitScore(this.props.points))
     }
 }

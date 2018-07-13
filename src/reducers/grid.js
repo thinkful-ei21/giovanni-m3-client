@@ -137,13 +137,11 @@ export default function reducer(state = initialState, action){
 
 
     function getSurrounding(pos){
-        // checkDir(pos, getVal(pos), 'left') remove this, it's for teting checkDir
         
         let y = parseInt(pos[0],10)
         let x = parseInt(pos[1],10)
 
         function outOfBounds(p){
-            // console.log(p, Object.keys(state.positions).includes(p) )
             return Object.keys(state.positions).includes(p)
         }
 
@@ -161,7 +159,6 @@ export default function reducer(state = initialState, action){
                     return newState.values[newState.positions[pos]]
                 })
             })
-        // console.log('surrounding:', sur1)
         const sur2 = getSurrounding(pos2)
             .map(lArr =>{
                 return lArr.map(pos =>{
@@ -177,7 +174,6 @@ export default function reducer(state = initialState, action){
         for (var i = 0; i < testList.length; i++) {
             if(testList[i] === v){
                 count ++
-                // console.log(count)
                 if(count === 3){result = true}
             }
             else{
@@ -194,10 +190,8 @@ export default function reducer(state = initialState, action){
         Object.keys(state.positions).forEach(pos1 =>{
             if(findAdjacentPos(pos1, 'right') !== 'out of bounds'){swapOptions.push([pos1, findAdjacentPos(pos1, 'right')])}
             if(findAdjacentPos(pos1, 'down') !== 'out of bounds'){swapOptions.push([pos1, findAdjacentPos(pos1, 'down')])}
-            // findAdjacentPos(pos1, 'right') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'right')])
-            // findAdjacentPos(pos1, 'down') === 'out of bounds' ? {} : swapOptions.push([pos1, findAdjacentPos(pos1, 'down')])
         })
-        // console.log(swapOptions)
+        
         for (let i = 0; i < swapOptions.length; i++) {
             let pos1 = swapOptions[i][0]
             let pos2 = swapOptions[i][1]
@@ -215,9 +209,7 @@ export default function reducer(state = initialState, action){
     }
 
     if(action.type === INC_VALUE){
-        // console.log(action.by)
         const newVal = getVal(action.position) + action.by
-        // console.log('incrimenting from ',getVal(action.position),'to ', newVal, 'at', action.position)
         const pos = getId(action.position)
 
         return {...state, values: {...state.values, [pos]: newVal}}
@@ -250,17 +242,14 @@ export default function reducer(state = initialState, action){
     }
 
     if(action.type === DROP_BLOCK){
-        // console.log('drop to ', action.position)
         let position1 = action.position
         let position2 = findAdjacentPos(position1, 'up')
-        // console.log(state.positions[position2])
         return {...state, positions: 
             {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
         }
     }
 
     if(action.type === INSERT_BLOCK){
-        //takes cell id, maybe block value
         let newId = state.latestId + 1
 
         let min = Infinity
@@ -269,18 +258,14 @@ export default function reducer(state = initialState, action){
         Object.values(state.values).forEach(v => {
             if(v > max){max = v}
             if(v < min){min = v}
-            // v > max ? max = v : {}
-            // v < min ? min = v : {}
         })
 
-        // this is sub-optimal in that it might return a low number if an extremely big combo occurs, but maybe that's fine?
         if(Object.values(state.values).length < 15){
             max = 4
             min = 1
         }
 
         const val = Math.floor(Math.random() * (max - min)) + min
-        // console.log('inserting', val, 'at', action.position )
         return {...state, latestId: newId, 
             positions: {...state.positions , [action.position]: newId},
             values: {...state.values, [newId]:val}
@@ -289,8 +274,6 @@ export default function reducer(state = initialState, action){
     }
 
     if (action.type === CHECK_GRID){
-
-        // console.log('checking', state)
         const groups = checkGrid()
         if(groups === false || groups.length === 0){ return state}
         else if(groups === 'Game Over'){
@@ -302,17 +285,13 @@ export default function reducer(state = initialState, action){
     }
 
     if(action.type === DELETE_BLOCK){
-        // console.log('deleting id ', state.positions[action.position])
         let newVals = {...state.values}
-
         delete newVals[`${state.positions[action.position]}`]
-        // console.log(newVals)
         return {...state, positions: {...state.positions, [action.position]: null}, values: newVals}
     }
 
     if(action.type === CALC_SCORE){
         const vals = Object.values(state.values)
-        // console.log(vals)
         let highest = 0
         vals.forEach(v => v > highest ? highest = v :{})
         return {...state, score: highest}

@@ -48,7 +48,7 @@ export class LoginPage extends React.Component {
                         OR
                     <button  name="register" id="register" className="login submit-button"
                     onClick={()=>{
-                        console.log(this.state.name)
+                        // console.log(this.state.name)
                         this.props.dispatch(register(this.state.name,this.state.password))}
                     }>
                         New User

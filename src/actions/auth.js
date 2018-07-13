@@ -65,27 +65,11 @@ export const login = (username, password) => dispatch => {
         password
       })
     })
-      // Reject any requests which don't return a 200 status, creating
-      // errors which follow a consistent format
       .then(res => normalizeResponseErrors(res))
       .then(res => res.json())
       .then(({ authToken }) => storeAuthInfo(authToken, dispatch))
       .then(()=> dispatch(submitScore(0)))
-      .catch(err => {
-        // const { code } = err;
-        // const message =
-        //   code === 401
-        //     ? 'Incorrect username or password'
-        //     : 'Unable to login, please try again';
-        dispatch(authError(err));
-        // Could not authenticate, so return a SubmissionError for Redux
-        // Form
-        // return Promise.reject(
-        //   new SubmissionError({
-        //     _error: message
-        //  })
-        //);
-      })
+      .catch(err => { dispatch(authError(err)); })
   );
 };
 
@@ -104,7 +88,6 @@ export const register = (username, password) => dispatch =>{
     })
     .then(res => {console.log(res.status)
       if(res.status === 201){dispatch(login(username, password))}
-      // res.status === 201 ? dispatch(login(username, password)): {}
       return res} )
     .then(res => normalizeResponseErrors(res))
     .then(res => res.json())
@@ -119,7 +102,6 @@ export const refreshAuthToken = () => (dispatch, getState) => {
     return fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
       headers: {
-        // Provide our existing token as credentials to get a new one
         Authorization: `Bearer ${authToken}`
       }
     })
@@ -142,10 +124,6 @@ export const refreshAuthToken = () => (dispatch, getState) => {
         Authorization: `Bearer ${authToken}`,
         score: score
       }
-      // ,
-      // body: JSON.stringify({
-      //   score
-      // })
     })
       .then(res => normalizeResponseErrors(res))
       .then(res => res.json())
@@ -156,22 +134,3 @@ export const refreshAuthToken = () => (dispatch, getState) => {
         clearAuthToken(authToken);
       })
   };
-  
-
-  // export const submitScore = () => (dispatch, getState) => {
-  //   const authToken = getState().auth.authToken;
-  //   return fetch(`${API_BASE_URL}/score`, {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${authToken}`
-  //     }
-  //   })
-  //     .then(res => normalizeResponseErrors(res))
-  //     .then(res => res.json())
-  //     .then((res => console.log(res)))
-  //     .catch(err => {
-  //       dispatch(authError(err));
-  //       dispatch(clearAuth());
-  //       clearAuthToken(authToken);
-  //     })
-  // };

@@ -9,18 +9,11 @@ export class Cell extends React.Component {
         this.state = { }
        }
 
-    
-
-    checkCell(){
-        // console.log('firing', this.props.grid[this.props.id])
-        // this.props.dispatch(insertBlock(this.props.id))
+    checkCell(){        
         if(this.props.grid[this.props.id]===null){
-            // console.log(this.props.id[0])
             if(this.props.id[0]==='1'){
-                // console.log('inserting')
                 this.props.dispatch(insertBlock(this.props.id))}
             else{
-                // console.log('dropping')
                 this.props.dispatch(dropBlock(this.props.id))
             }
         }
@@ -36,18 +29,12 @@ export class Cell extends React.Component {
     componentDidMount(){this.checkCell()}
 
     componentDidUpdate(prevProps) {
-        // console.log('updated')
-        if (this.props.grid[this.props.id] !== prevProps.grid[this.props.id] || this.props.grid[this.props.id] === null) {
-            // console.log('checking')
-            this.checkCell();
-        }
+        if (this.props.grid[this.props.id] !== prevProps.grid[this.props.id] || this.props.grid[this.props.id] === null) 
+            { this.checkCell(); }
     }
   
-  
-
     render(){
         
-        // console.log(this.props.values)
       return (
         <div id={this.props.id} key={this.props.id} className={`${this.props.className} `}>
             
@@ -57,16 +44,12 @@ export class Cell extends React.Component {
                     value = {this.props.values[this.props.grid[this.props.id]]}
                     className='block'/>) 
             }
-            {/* {this.state.insert}   */}
-            {/* {this.props.grid[this.props.id]} */}
-             {/* <Block id='a' className='block'/> */}
         </div>
         )
     }
 }
 
 const mapStateToProps = state => {
-    // console.log('mapping')
     return {
         grid: state.grid.positions,
         values: state.grid.values

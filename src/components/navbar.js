@@ -46,10 +46,9 @@ export class NavBar extends React.Component {
                         <button className="nav-link"  onClick={()=> this.toggleContact()}> Contact </button>
                         </li>
                         <li className={`menu ${menu}`}>
-                            {/* a href="https://github.com/mormagli/match-3-client"> GitHub </a>  */}
                             <button className="nav-link"  onClick={()=> this.openLink("https://github.com/mormagli/match-3-client")}> GitHub </button>
                             </li>
-                        <li className={`menu ${menu}`}>something </li>
+                        <li className={`menu ${menu}`}>Portfolio </li>
                         <li className={`menu ${menu}`}> 
                             <button className="nav-link"  onClick={()=> this.toggleAbout()}> About </button>
                         </li>
@@ -75,10 +74,7 @@ export class NavBar extends React.Component {
 }
 
 const mapStateToProps = state => {
-    // console.log('mapping')
-    return {
-
-    };
+    return {    };
   };
 
 export default (connect(mapStateToProps)(NavBar));

@@ -316,7 +316,6 @@ main {
   min-height: 45px;
   width: 100%;
   background: #11a8ab;
-  border: 2px solid black;
 }
 
 .navbar > button {

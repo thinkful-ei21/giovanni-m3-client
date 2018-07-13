@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import {spring, tween} from 'popmotion';
 
-import {swapBlocks, insertBlock, dropBlock} from '../actions/grid';
+import {swapBlocks} from '../actions/grid';
 
 
 // const looseSpring = (props) =>
@@ -67,8 +67,7 @@ export class Block extends Component{
     
     getDirection(){
         let id = this.props.id
-        // console.log(id, this.xVal, this.yVal)
-        
+                
         if (Math.abs(Math.abs(this.xVal)-Math.abs(this.yVal)) >= 25){
             let direction = ''
             if(Math.abs(this.xVal) > Math.abs(this.yVal) && this.xVal > 0){direction='right'}
@@ -97,9 +96,6 @@ export class Block extends Component{
             key={this.props.id}
             value={this.props.value}
             className={`item item-${color} btn btn-lg btn-default ${this.state.dragging ? 'dragging' : ''}` }
-            // onValueChange={{ x: x => console.log('x',x),
-            //     y: y => console.log('y',y)
-            // }}
             onDragStart={()=> this.startDragging()}
             onValueChange={{ x: x => this.setX(x),
             y: y => this.setY(y)
@@ -107,7 +103,6 @@ export class Block extends Component{
             onDragEnd ={()=>{
                 this.stopDragging()
                 this.getDirection()}}
-            // onClick={()=> this.removeBlock()}
             >
                 <div className="item-value"> {this.props.value} </div>
             </Item>
