@@ -438,7 +438,15 @@ main {
     padding: 0px;
   }
 
+  .contact li{
+    text-align:left;
+    display: block;
+  }
+
   .hidden {
+    display: none;
+  }
+  .hidden li{
     display: none;
   }
 }

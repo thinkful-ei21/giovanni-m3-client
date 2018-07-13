@@ -41,26 +41,26 @@ export class Block extends Component{
     setY(y){this.yVal = y}
 
 
-    checkCell(){
-        // console.log('firing', this.props.grid[this.props.id])
-        // this.props.dispatch(insertBlock(this.props.id))
-        if(this.props.value===null){
-            // console.log(this.props.id[0])
-            if(this.props.id[0]==='1'){
-                // console.log('insertingat ' , this.props.id)
-                this.props.dispatch(insertBlock(this.props.id))}
-            else{
-                // console.log('dropping at', this.props.id)
-                this.props.dispatch(dropBlock(this.props.id))
-            }
-        }
-        // else{
-        //     this.setState({insert:(
-        //         <Block id={this.props.grid[this.props.id]} className='block'/>
-            // )})
-        // }
+    // checkCell(){
+    //     // console.log('firing', this.props.grid[this.props.id])
+    //     // this.props.dispatch(insertBlock(this.props.id))
+    //     if(this.props.value===null){
+    //         // console.log(this.props.id[0])
+    //         if(this.props.id[0]==='1'){
+    //             // console.log('insertingat ' , this.props.id)
+    //             this.props.dispatch(insertBlock(this.props.id))}
+    //         else{
+    //             // console.log('dropping at', this.props.id)
+    //             this.props.dispatch(dropBlock(this.props.id))
+    //         }
+    //     }
+    //     // else{
+    //     //     this.setState({insert:(
+    //     //         <Block id={this.props.grid[this.props.id]} className='block'/>
+    //         // )})
+    //     // }
         
-    }
+    // }
 
 
     // componentDidMount(){this.checkCell()}
