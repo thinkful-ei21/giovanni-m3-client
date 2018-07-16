@@ -49,7 +49,8 @@ const storeAuthInfo = (authToken, dispatch) => {
 
 export const logOut = () => dispatch => {
   dispatch(clearAuth());
-  dispatch(resetGame())
+  dispatch(resetGame());
+  clearAuthToken();
 }
 
 export const login = (username, password) => dispatch => {
