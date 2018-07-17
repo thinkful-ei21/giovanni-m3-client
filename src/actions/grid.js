@@ -1,18 +1,6 @@
 
 
 
-// const storeAuthInfo = (authToken, dispatch) => {
-//     const decodedToken = jwtDecode(authToken);
-//     dispatch(setAuthToken(authToken));
-//     dispatch(authSuccess(decodedToken.user));
-//     saveAuthToken(authToken);
-//   };
-
-// export const logOut = () => dispatch => {
-//   dispatch(clearAuth());
-//   dispatch(resetGame());
-//   clearAuthToken();
-// }
 
 export const SWAP_BLOCKS = 'SWAP_BLOCKS';
 
@@ -20,9 +8,8 @@ export const swapBlocks = (blockId, dir) => dispatch =>{
     dispatch(animateSwap(blockId,dir))
 
     const trigger = () => {dispatch(swap(blockId, dir))}
-    setTimeout( trigger , 150)
+    setTimeout( trigger , 300)
 }
-
 
 export const swap  =(blockId, dir)=> ({
   type: SWAP_BLOCKS,
@@ -36,6 +23,20 @@ export const animateSwap =(blockId, dir)=> ({
     blockId,
     dir
 })
+
+export const DROP_BLOCK = 'DROP_BLOCK';
+
+export const dropBlock = (position) => dispatch => {
+    // dispatch(animateSwap(position,'up'))
+    const trigger = () => {dispatch(drop(position))}
+    setTimeout( trigger , 300)
+}
+
+export const drop  =(position)=> ({
+  type: DROP_BLOCK,
+  position
+  
+});
 
 export const INSERT_BLOCK = 'INSERT_BLOCK';
 export const insertBlock =(position)=>({
@@ -57,12 +58,6 @@ export const incrimentVal = (position, by) => ({
     by
 })
 
-export const DROP_BLOCK = 'DROP_BLOCK';
-export const dropBlock  =(position)=> ({
-  type: DROP_BLOCK,
-  position
-  
-});
 
 export const DELETE_BLOCK = 'DELETE_BLOCK';
 export const deleteBlock =(position)=> ({

@@ -17,15 +17,20 @@ import {swapBlocks} from '../actions/grid';
 const Item = posed.li({
     draggable: true,
     centered: {},
-    left: {x: ({w}) => {  return  -(w) }},
-    right: {x: ({w}) => { return (w) }},
-    up: {y: ({w}) => { return -(w) }},
-    down: {y: ({w}) => { return (w) }},
-    down: {y: 65},
+    left: {x: ({w}) => -(w) },
+    right: {x: ({w}) => (w) },
+    up: {y: ({w}) => -(w) },
+    down: {y: ({w}) => (w) },
+    
+
+    // default:{dragBounds: ({w})=>  {left: -w, right: w, top: -w, bottom: w} },
+
     dragBounds: { left: -65, right: 65, top: -65, bottom: 65 },
     dragEnd: {transition: spring },
     flip: {transition: tween},
-    props: {w:0}
+    props: {w:0},
+    // initialPose: 'default',
+
 });
 
 
@@ -53,7 +58,6 @@ export class Block extends Component{
 
 
     clickTest(){
-    console.log('clicking')
 
     // var element = document.getElementById(`${this.props.id}`)
 

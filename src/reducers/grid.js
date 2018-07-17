@@ -17,6 +17,7 @@ const initialState = {
     values:{   },
     groups:[   ],
     swapping:{   },
+    dropping:[   ],
     latestId: 99,
     score: 0,
     highScore: -1,
@@ -27,6 +28,7 @@ const initialState = {
 
 
 export default function reducer(state = initialState, action){
+
 
     function findPos(block){
         return Object.entries(state.positions).find(pair=> pair[1]===block)[0]
@@ -223,6 +225,7 @@ export default function reducer(state = initialState, action){
     }
 
     if(action.type === ANIMATE_SWAP){
+
         let position1 = findPos(parseInt(action.blockId,10))
         let position2 = findAdjacentPos(position1, action.dir)
         let dir2
@@ -242,11 +245,33 @@ export default function reducer(state = initialState, action){
             return state}
         else{ 
             return {...state, swapping:{...state.swapping, [position1]:action.dir, [position2]:dir2}}
-        }
+}
+
+        // let position1 = action.blockId.length > 2 ? findPos(parseInt(action.blockId,10)) : action.blockId
+        // let position2 = findAdjacentPos(position1, action.dir)
+        // let dir2
+
+        // if(action.dir=== 'up'){dir2='down'}
+        // else if(action.dir=== 'down'){dir2='up'}
+        // else if(action.dir=== 'left'){dir2='right'}
+        // else if(action.dir=== 'right'){dir2='left'}
+
+        // let newState = {...state, positions: 
+        //     {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
+        //     }
+
+        // if(position2 ==='out of bounds'){return state}
+        // else if(didMatch(position1, position2, newState)===false){
+
+        //     return state}
+        // else{ 
+        //     return {...state, swapping:{...state.swapping, [position1]:action.dir, [position2]:dir2}}
+        // }
     }
 
     if(action.type === SWAP_BLOCKS){
         // console.log('blockId:', action.blockId, action.dir)
+        
         let position1 = findPos(parseInt(action.blockId,10))
         // console.log (position1)
         let position2 = findAdjacentPos(position1, action.dir)
@@ -264,11 +289,36 @@ export default function reducer(state = initialState, action){
     }
 
     if(action.type === DROP_BLOCK){
-        let position1 = action.position
-        let position2 = findAdjacentPos(position1, 'up')
-        return {...state, positions: 
-            {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
+
+        if(state.positions[action.position]){return state}
+
+        else if (Object.values(state.positions).filter(x => x===null).length > state.dropping.length +1 || state.dropping ===[] ){
+            // console.log('wait...', Object.values(state.positions).filter(x => x===null), state.dropping)
+            return state.dropping.includes(action.position)
+            ? state
+            : {...state, dropping: [...state.dropping, action.position]} 
         }
+        else{
+            // console.log('dropping', state.dropping)
+            let newState = {...state};
+            [...state.dropping, action.position].forEach(pos =>{
+                let position1 = pos
+                let position2 = findAdjacentPos(position1, 'up')
+
+                newState ={...newState, positions: 
+                    {...newState.positions, [position1]: newState.positions[position2], [position2] : newState.positions[position1] }
+                        }
+            })
+            return {...newState, dropping: []}
+        }
+
+    //     let position1 = action.position
+    //     let position2 = findAdjacentPos(position1, 'up')
+
+    //     return {...state, positions: 
+    // {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
+    //     }
+        
     }
 
     if(action.type === INSERT_BLOCK){
