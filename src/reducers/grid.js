@@ -1,5 +1,7 @@
 
-import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, CHECK_GRID, RESET_GAME, SET_HIGH, SET_VALUE, INC_VALUE, CALC_SCORE} from '../actions/grid'
+import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, 
+        CHECK_GRID, RESET_GAME, SET_HIGH, SET_VALUE, 
+        INC_VALUE, CALC_SCORE, ANIMATE_SWAP} from '../actions/grid'
 
 
 
@@ -12,12 +14,9 @@ const initialState = {
         41:null, 42:null, 43:null, 44:null, 45:null, 46:null, 47:null,
         51:null, 52:null, 53:null, 54:null, 55:null, 56:null, 57:null
     },
-    values:{
-        
-    },
-    groups:[
-
-    ],
+    values:{   },
+    groups:[   ],
+    swapping:{   },
     latestId: 99,
     score: 0,
     highScore: -1,
@@ -221,6 +220,29 @@ export default function reducer(state = initialState, action){
 
     if(action.type === RESET_GAME){
         return {...initialState, highScore:state.highScore}
+    }
+
+    if(action.type === ANIMATE_SWAP){
+        let position1 = findPos(parseInt(action.blockId,10))
+        let position2 = findAdjacentPos(position1, action.dir)
+        let dir2
+
+        if(action.dir=== 'up'){dir2='down'}
+        else if(action.dir=== 'down'){dir2='up'}
+        else if(action.dir=== 'left'){dir2='right'}
+        else if(action.dir=== 'right'){dir2='left'}
+
+        let newState = {...state, positions: 
+            {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
+            }
+
+        if(position2 ==='out of bounds'){return state}
+        else if(didMatch(position1, position2, newState)===false){
+
+            return state}
+        else{ 
+            return {...state, swapping:{...state.swapping, [position1]:action.dir, [position2]:dir2}}
+        }
     }
 
     if(action.type === SWAP_BLOCKS){

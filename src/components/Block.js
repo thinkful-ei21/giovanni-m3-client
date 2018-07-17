@@ -10,11 +10,22 @@ import {swapBlocks} from '../actions/grid';
 // const looseSpring = (props) =>
 //   spring({ ...props, stiffness: 200, damping: 0 })
 
+// let width = 77 
+
+// transition: ({ i }) => ({ delay: i * 50 })
+
 const Item = posed.li({
     draggable: true,
-    dragBounds: { left: -60, right: 60, top: -60, bottom: 60 },
+    centered: {},
+    left: {x: ({w}) => {  return  -(w) }},
+    right: {x: ({w}) => { return (w) }},
+    up: {y: ({w}) => { return -(w) }},
+    down: {y: ({w}) => { return (w) }},
+    down: {y: 65},
+    dragBounds: { left: -65, right: 65, top: -65, bottom: 65 },
     dragEnd: {transition: spring },
-    flip: {transition: tween}
+    flip: {transition: tween},
+    props: {w:0}
 });
 
 
@@ -29,7 +40,7 @@ const Item = posed.li({
 export class Block extends Component{
     constructor(){
         super();
-        this.state = { direction: '', dragging:false }
+        this.state = { direction: '', dragging:false, swapping:false, width:0 }
        }
 
 
@@ -41,6 +52,28 @@ export class Block extends Component{
     setY(y){this.yVal = y}
 
 
+    clickTest(){
+    console.log('clicking')
+
+    // var element = document.getElementById(`${this.props.id}`)
+
+    // console.log(document.getElementById(this.props.id).offsetHeight)
+    // this.setState({triggered:!this.state.triggered})
+    
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.swap[this.props.parId] !== prevProps.swap[this.props.parId]) {
+            // console.log(this.state)
+            this.setState({swapping: this.props.swap[this.props.parId]})
+
+        }
+    }
+
+    componentDidMount(){
+        // console.log(document.getElementById(this.props.id).offsetHeight)
+        this.setState({width:document.getElementById(this.props.id).offsetHeight})
+    }
     // checkCell(){
     //     // console.log('firing', this.props.grid[this.props.id])
     //     // this.props.dispatch(insertBlock(this.props.id))
@@ -92,14 +125,16 @@ export class Block extends Component{
 
         return (
             
-            <Item  id={this.props.id} 
+            <Item  id={this.props.id}
+            
             key={this.props.id}
             value={this.props.value}
             className={`item item-${color} btn btn-lg btn-default ${this.state.dragging ? 'dragging' : ''}` }
+            pose={!this.state.swapping ? 'centered' : this.props.swap[this.props.parId] }
+            onClick={()=> this.clickTest()}
+            w={this.state.width}
             onDragStart={()=> this.startDragging()}
-            onValueChange={{ x: x => this.setX(x),
-            y: y => this.setY(y)
-            }}
+            onValueChange={{ x: x => this.setX(x), y: y => this.setY(y) }}
             onDragEnd ={()=>{
                 this.stopDragging()
                 this.getDirection()}}
@@ -114,7 +149,8 @@ export class Block extends Component{
 const mapStateToProps = state => {
     return {
         grid: state.grid.positions,
-        values: state.grid.values
+        values: state.grid.values,
+        swap: state.grid.swapping
     };
   };
 

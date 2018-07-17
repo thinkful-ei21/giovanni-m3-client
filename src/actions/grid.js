@@ -1,13 +1,41 @@
 
 
 
+// const storeAuthInfo = (authToken, dispatch) => {
+//     const decodedToken = jwtDecode(authToken);
+//     dispatch(setAuthToken(authToken));
+//     dispatch(authSuccess(decodedToken.user));
+//     saveAuthToken(authToken);
+//   };
+
+// export const logOut = () => dispatch => {
+//   dispatch(clearAuth());
+//   dispatch(resetGame());
+//   clearAuthToken();
+// }
 
 export const SWAP_BLOCKS = 'SWAP_BLOCKS';
-export const swapBlocks  =(blockId, dir)=> ({
+
+export const swapBlocks = (blockId, dir) => dispatch =>{
+    dispatch(animateSwap(blockId,dir))
+
+    const trigger = () => {dispatch(swap(blockId, dir))}
+    setTimeout( trigger , 150)
+}
+
+
+export const swap  =(blockId, dir)=> ({
   type: SWAP_BLOCKS,
   blockId,
   dir
 });
+
+export const ANIMATE_SWAP = 'ANIMATE_SWAP';
+export const animateSwap =(blockId, dir)=> ({
+    type: ANIMATE_SWAP,
+    blockId,
+    dir
+})
 
 export const INSERT_BLOCK = 'INSERT_BLOCK';
 export const insertBlock =(position)=>({
