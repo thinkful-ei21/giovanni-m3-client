@@ -60,6 +60,7 @@ export class NavBar extends React.Component {
                                 <li className={`about about-text ${about}`}>Match 3 in a row or column to clear them. </li>
                                 <li className={`about about-text ${about}`}>Match more than three to upgrade one. </li>
                                 <li className={`about about-text ${about}`}>If you clear all blocks of a number, no new blocks of that number will appear. </li>
+                                <li className={`about about-text ${about}`}>Log in to preserve your High Score. </li>
                                 <li className={`about about-text ${about}`}>See how high you can get! </li>
                     </ul>
                     <ul className={`about-text contact ${contact}`}>

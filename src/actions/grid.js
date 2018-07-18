@@ -29,7 +29,7 @@ export const DROP_BLOCK = 'DROP_BLOCK';
 export const dropBlock = (position) => dispatch => {
     // dispatch(animateSwap(position,'up'))
     const trigger = () => {dispatch(drop(position))}
-    setTimeout( trigger , 300)
+    setTimeout( trigger , 150)
 }
 
 export const drop  =(position)=> ({

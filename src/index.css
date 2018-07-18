@@ -338,13 +338,16 @@ main {
 .navbar ul {
   display: block;
   padding: 0;
-  margin: 0;
+  /* margin: 0; */
+  margin-top: 0;
+  margin-bottom: 0;
   list-style-type: none;
-  text-align: right;
+  text-align: center;
   font-size: 30px;
   color: white;
   text-shadow: black 3px 3px;
   font-weight: 400;
+  
 }
 
 .navbar li  {
@@ -354,6 +357,7 @@ main {
   min-height: 45px;
   width: 100%;
   background: #11a8ab;
+  
 
 
 }
@@ -378,6 +382,13 @@ main {
   text-shadow: black 1px 1px;
   padding:1%;
   min-height: 20px;
+  max-width: 540px;
+}
+
+.about-text {
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hidden {

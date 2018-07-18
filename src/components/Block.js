@@ -10,36 +10,23 @@ import {swapBlocks} from '../actions/grid';
 // const looseSpring = (props) =>
 //   spring({ ...props, stiffness: 200, damping: 0 })
 
-// let width = 77 
-
-// transition: ({ i }) => ({ delay: i * 50 })
-
 const Item = posed.li({
     draggable: true,
     centered: {},
-    left: {x: ({w}) => -(w) },
-    right: {x: ({w}) => (w) },
-    up: {y: ({w}) => -(w) },
-    down: {y: ({w}) => (w) },
-    
 
-    // default:{dragBounds: ({w})=>  {left: -w, right: w, top: -w, bottom: w} },
+    left: {x: ({w}) => -(w-1) },
+    right: {x: ({w}) => (w-1) },
+    up: {y: ({w}) => -(w-1) },
+    down: {y: ({w}) => (w-1) },
 
     dragBounds: { left: -65, right: 65, top: -65, bottom: 65 },
     dragEnd: {transition: spring },
     flip: {transition: tween},
     props: {w:0},
-    // initialPose: 'default',
+
 
 });
 
-
-
-// const Item = posed.li({
-//   flip: {
-//     transition: tween
-//   }
-// })
 
 
 export class Block extends Component{
@@ -47,30 +34,20 @@ export class Block extends Component{
         super();
         this.state = { direction: '', dragging:false, swapping:false, width:0 }
        }
-
-
     
     xVal;
     yVal;
-
     setX(x){this.xVal = x}
     setY(y){this.yVal = y}
 
 
-    clickTest(){
-
-    // var element = document.getElementById(`${this.props.id}`)
-
-    // console.log(document.getElementById(this.props.id).offsetHeight)
-    // this.setState({triggered:!this.state.triggered})
-    
-    }
 
     componentDidUpdate(prevProps) {
         if (this.props.swap[this.props.parId] !== prevProps.swap[this.props.parId]) {
-            // console.log(this.state)
             this.setState({swapping: this.props.swap[this.props.parId]})
-
+        }
+        if(this.state.width !== document.getElementById(this.props.id).offsetHeight){
+            this.setState({width:document.getElementById(this.props.id).offsetHeight})
         }
     }
 
@@ -78,29 +55,7 @@ export class Block extends Component{
         // console.log(document.getElementById(this.props.id).offsetHeight)
         this.setState({width:document.getElementById(this.props.id).offsetHeight})
     }
-    // checkCell(){
-    //     // console.log('firing', this.props.grid[this.props.id])
-    //     // this.props.dispatch(insertBlock(this.props.id))
-    //     if(this.props.value===null){
-    //         // console.log(this.props.id[0])
-    //         if(this.props.id[0]==='1'){
-    //             // console.log('insertingat ' , this.props.id)
-    //             this.props.dispatch(insertBlock(this.props.id))}
-    //         else{
-    //             // console.log('dropping at', this.props.id)
-    //             this.props.dispatch(dropBlock(this.props.id))
-    //         }
-    //     }
-    //     // else{
-    //     //     this.setState({insert:(
-    //     //         <Block id={this.props.grid[this.props.id]} className='block'/>
-    //         // )})
-    //     // }
-        
-    // }
 
-
-    // componentDidMount(){this.checkCell()}
     
     getDirection(){
         let id = this.props.id
@@ -123,6 +78,18 @@ export class Block extends Component{
     stopDragging(){
         this.setState({dragging:false})
     }
+
+    clickTest(){
+
+        // var element = document.getElementById(`${this.props.id}`)
+    
+        // console.log(document.getElementById(this.props.id).offsetHeight)
+        // this.setState({triggered:!this.state.triggered})
+        
+        }
+
+
+
     render(){
         let color = this.props.value;
         while(color> 9){color = color-9}
