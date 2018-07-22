@@ -9,8 +9,7 @@
 
 <img src="http://i30.photobucket.com/albums/c320/mormagli/Screenshot%20from%202018-07-13%2009-39-48.png" width="500px" display="inline-block"/>
 
-<img src="http://i30.photobucket.com/albums/c320/mormagli/Screenshot%20from%202018-07-13%2009-40-57.png" 
- width="300px"/>
+<img src="http://i30.photobucket.com/albums/c320/mormagli/Screenshot%20from%202018-07-13%2009-40-57.png" width="300px" display="inline-block"/>
 
 
 > The Match 3 ++ client is built on React-Redux, and uses Pose for animations. The server uses express/knex for routing, passport for authentication, and mongoose to manage a mongo db. The game logic is handled in /reducers/grid with actions dispatched by /components/Game. Individual block elements, user interactions, and animations are declared by /components/Block. Login requests and score submission are handled in actions/auth.
