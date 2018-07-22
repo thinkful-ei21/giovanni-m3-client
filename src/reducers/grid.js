@@ -309,7 +309,7 @@ export default function reducer(state = initialState, action){
         // console.log(current)
         current = current.sort()
         current.pop()
-        console.log(current)
+        // console.log(current)
 
         const roll = ()=>{
             return current[ Math.floor(Math.random()*current.length) ]
@@ -343,7 +343,7 @@ export default function reducer(state = initialState, action){
         }
 
         rollVal()
-        console.log(val)
+        // console.log(val)
         return newState
         // let min = Infinity
         // let max = 0
