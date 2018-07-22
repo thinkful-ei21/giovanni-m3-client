@@ -14,10 +14,7 @@ const initialState = {
         41:null, 42:null, 43:null, 44:null, 45:null, 46:null, 47:null,
         51:null, 52:null, 53:null, 54:null, 55:null, 56:null, 57:null
     },
-    values:{   },
-    groups:[   ],
-    swapping:{   },
-    dropping:[   ],
+    values:{   },    groups:[   ],    swapping:{   },    dropping:[   ],    recent:[   ],
     latestId: 99,
     score: 0,
     highScore: -1,
@@ -39,13 +36,11 @@ export default function reducer(state = initialState, action){
     }
 
     function getVal(pos){
-        // const result =state.values[state.positions[pos]]
-        // if(result === NaN){console.log(pos, state)}
         return state.values[state.positions[pos]]
     }
 
     function findAdjacentPos(pos, dir){
-        // these limits will need to change when we expand the grid
+        // these limits will need to change if we change the size of the play area
         let y = parseInt(pos[0],10)
         let x = parseInt(pos[1],10)
 
@@ -90,39 +85,45 @@ export default function reducer(state = initialState, action){
         let groups = []
 
         for (let i = 0; i < posList.length; i++) {
-            let group = [posList[i]]
-            let val = getVal(posList[i])
-
             
-            for (let n  = 0; n < group.length; n++) {
-                let left = checkDir(group[n], val, 'left')
-                let right = checkDir(group[n], val, 'right')
-                let up = checkDir(group[n], val, 'up')
-                let down = checkDir(group[n], val, 'down')
+            if(posList[i] !== null){
+                let group = [posList[i]]
+                let val = getVal(posList[i])
+                
 
-                // console.log(group[n], val, left.length, right.length, up.length, down.length)
-                if (left.length -1 + right.length -1 < 2 && up.length -1 + down.length -1 < 2 && n===0){
-                    
-                    group.splice(n,1)
-                    
-                }
-                else{
-                    if(left.length -1 + right.length -1 >= 2){
-                        left.forEach(p => group.includes(p)? {} : group.push(p))
-                        right.forEach(p => group.includes(p)? {} : group.push(p))
+
+                // let length = group.length
+                for (let n  = 0; n < group.length; n++) {
+                    let left = checkDir(group[n], val, 'left')
+                    let right = checkDir(group[n], val, 'right')
+                    let up = checkDir(group[n], val, 'up')
+                    let down = checkDir(group[n], val, 'down')
+
+
+                    if (left.length -1 + right.length -1 < 2 && up.length -1 + down.length -1 < 2 && n===0){
+                        
+                        group.splice(n,1)
+                        
                     }
-                    else if(up.length -1 + down.length -1 >= 2){
-                        up.forEach(p => group.includes(p)? {} : group.push(p))
-                        down.forEach(p => group.includes(p)? {} : group.push(p))
+                
+                    else{
+
+                        let hor = left.concat(right)
+                        let vert = up.concat(down)
+
+
+                        if(hor.length >3){hor.forEach(p => group.includes(p)? {} : group.push(p))}
+                        if(vert.length >3){vert.forEach(p => group.includes(p)? {} : group.push(p))}
+
                     }
+            
                 }
-        
+                group.forEach(p => posList.includes(p)? posList.splice(posList.indexOf(p),1,null) : {} )
+                
+                // group.length > 1 ?  console.log(val, group) : {}    
+                // group.length > 2 ? console.log('group size', group.length, group) : {}
+                groups.push(group)
             }
-            group.forEach(p => posList.includes(p)? posList.splice(posList.indexOf(p),1) : {} )
-            
-            // group.length > 1 ?  console.log(val, group) : {}      
-            groups.push(group)
-
         }
         let matches = groups.filter(arr => arr.length > 0)
         // console.log('matches',matches.length)
@@ -245,28 +246,8 @@ export default function reducer(state = initialState, action){
             return state}
         else{ 
             return {...state, swapping:{...state.swapping, [position1]:action.dir, [position2]:dir2}}
-}
+            }
 
-        // let position1 = action.blockId.length > 2 ? findPos(parseInt(action.blockId,10)) : action.blockId
-        // let position2 = findAdjacentPos(position1, action.dir)
-        // let dir2
-
-        // if(action.dir=== 'up'){dir2='down'}
-        // else if(action.dir=== 'down'){dir2='up'}
-        // else if(action.dir=== 'left'){dir2='right'}
-        // else if(action.dir=== 'right'){dir2='left'}
-
-        // let newState = {...state, positions: 
-        //     {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
-        //     }
-
-        // if(position2 ==='out of bounds'){return state}
-        // else if(didMatch(position1, position2, newState)===false){
-
-        //     return state}
-        // else{ 
-        //     return {...state, swapping:{...state.swapping, [position1]:action.dir, [position2]:dir2}}
-        // }
     }
 
     if(action.type === SWAP_BLOCKS){
@@ -312,36 +293,79 @@ export default function reducer(state = initialState, action){
             return {...newState, dropping: []}
         }
 
-    //     let position1 = action.position
-    //     let position2 = findAdjacentPos(position1, 'up')
-
-    //     return {...state, positions: 
-    // {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
-    //     }
-        
     }
 
     if(action.type === INSERT_BLOCK){
         let newId = state.latestId + 1
 
-        let min = Infinity
-        let max = 0
-
-        Object.values(state.values).forEach(v => {
-            if(v > max){max = v}
-            if(v < min){min = v}
+        let current = []
+        Object.values(state.values).forEach(v=>{
+            if(!current.includes(v) && v !==null){current.push(v)}
         })
 
-        if(Object.values(state.values).length < 15){
-            max = 4
-            min = 1
+        if(!(Object.values(state.values).sort((a,b)=>b-a)[0] > 4)){
+            current = [1,2,3,4,5]
+        }
+        // console.log(current)
+        current = current.sort()
+        current.pop()
+        console.log(current)
+
+        const roll = ()=>{
+            return current[ Math.floor(Math.random()*current.length) ]
         }
 
-        const val = Math.floor(Math.random() * (max - min)) + min
-        return {...state, latestId: newId, 
-            positions: {...state.positions , [action.position]: newId},
-            values: {...state.values, [newId]:val}
+        
+        let val
+        let tries = 0
+        let newState
+        
+        const rollVal =()=>{
+            val = roll()
+            if(val !== state.recent[0]){
+                newState = {...state, latestId: newId, 
+                    positions: {...state.positions , [action.position]: newId},
+                    values: {...state.values, [newId]:val},
+                    recent: [val]
+                }
+            }
+            else if(tries >= state.recent.length){
+                newState = {...state, latestId: newId, 
+                    positions: {...state.positions , [action.position]: newId},
+                    values: {...state.values, [newId]:val},
+                    recent: [...state.recent, val]
+                }
+            }
+            else {
+                tries = tries +1
+                rollVal()
+            }
         }
+
+        rollVal()
+        console.log(val)
+        return newState
+        // let min = Infinity
+        // let max = 0
+
+        // Object.values(state.values).forEach(v => {
+        //     if(v > max){max = v}
+        //     if(v < min){min = v}
+        // })
+
+        
+        // if(!(Object.values(state.values).sort((a,b)=>b-a)[0] > 5)){
+        //     max = 5
+        //     min = 1
+        // }
+
+        // const val = Math.floor(Math.random() * (max - min)) + min
+
+
+        // return {...state, latestId: newId, 
+        //     positions: {...state.positions , [action.position]: newId},
+        //     values: {...state.values, [newId]:val}
+        // }
 
     }
 
