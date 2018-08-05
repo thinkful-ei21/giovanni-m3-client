@@ -43,8 +43,15 @@ export class Block extends Component{
 
 
     componentDidUpdate(prevProps) {
+        
+
+
         if (this.props.swap[this.props.parId] !== prevProps.swap[this.props.parId]) {
+            // console.log(this.props.swap[this.props.parId])
             this.setState({swapping: this.props.swap[this.props.parId]})
+        }
+        else if (this.props.swap[this.props.parId] === 'down' && !this.state.swapping){
+            this.setState({swapping: 'down'})
         }
         if(this.state.width !== document.getElementById(this.props.id).offsetHeight){
             this.setState({width:document.getElementById(this.props.id).offsetHeight})

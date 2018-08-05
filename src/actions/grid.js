@@ -24,18 +24,25 @@ export const animateSwap =(blockId, dir)=> ({
     dir
 })
 
+
 export const DROP_BLOCK = 'DROP_BLOCK';
 
 export const dropBlock = (position) => dispatch => {
-    // dispatch(animateSwap(position,'up'))
+    dispatch(animateDrop(position))
     const trigger = () => {dispatch(drop(position))}
-    setTimeout( trigger , 150)
+    setTimeout( trigger , 50)
 }
 
 export const drop  =(position)=> ({
   type: DROP_BLOCK,
   position
   
+});
+
+export const ANIMATE_DROP = 'ANIMATE_DROP';
+export const animateDrop =(position)=>({
+    type: ANIMATE_DROP,
+    position
 });
 
 export const INSERT_BLOCK = 'INSERT_BLOCK';

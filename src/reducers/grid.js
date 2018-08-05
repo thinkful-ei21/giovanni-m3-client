@@ -1,7 +1,7 @@
 
 import {SWAP_BLOCKS, DROP_BLOCK, INSERT_BLOCK, DELETE_BLOCK, 
         CHECK_GRID, RESET_GAME, SET_HIGH, SET_VALUE, 
-        INC_VALUE, CALC_SCORE, ANIMATE_SWAP} from '../actions/grid'
+        INC_VALUE, CALC_SCORE, ANIMATE_SWAP, ANIMATE_DROP} from '../actions/grid'
 
 
 
@@ -258,7 +258,8 @@ export default function reducer(state = initialState, action){
         let position2 = findAdjacentPos(position1, action.dir)
         
         let newState = {...state, positions: 
-            {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] }
+            {...state.positions, [position1]: state.positions[position2], [position2] : state.positions[position1] },
+            swapping:{...state.swapping, [position1]: null, [position2]: null}
             }
 
         if(position2 ==='out of bounds'){return state}
@@ -287,13 +288,25 @@ export default function reducer(state = initialState, action){
                 let position2 = findAdjacentPos(position1, 'up')
 
                 newState ={...newState, positions: 
-                    {...newState.positions, [position1]: newState.positions[position2], [position2] : newState.positions[position1] }
-                        }
+                    {...newState.positions, [position1]: newState.positions[position2], [position2] : newState.positions[position1] },
+                    swapping: {...newState.swapping, [position2] : null}    
+                }
             })
             return {...newState, dropping: []}
         }
 
     }
+
+    if(action.type === ANIMATE_DROP){
+        // if(state.positions[action.position]){return state}
+        
+            
+            let position2 = findAdjacentPos(action.position, 'up')
+
+            return {...state, swapping:{...state.swapping, [position2]: 'down'}}
+        
+
+    };
 
     if(action.type === INSERT_BLOCK){
         let newId = state.latestId + 1
@@ -307,7 +320,7 @@ export default function reducer(state = initialState, action){
             current = [1,2,3,4,5]
         }
         // console.log(current)
-        current = current.sort()
+        current = current.sort((a,b)=>a-b)
         current.pop()
         // console.log(current)
 
