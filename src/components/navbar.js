@@ -48,7 +48,9 @@ export class NavBar extends React.Component {
                         <li className={`menu ${menu}`}>
                             <button className="nav-link"  onClick={()=> this.openLink("https://github.com/mormagli/match-3-client")}> GitHub </button>
                             </li>
-                        <li className={`menu ${menu}`}>Portfolio </li>
+                        <li className={`menu ${menu}`}>
+                        <button className="nav-link"  onClick={()=> this.openLink("https://giovanni-ricci.com/")}> Portfolio </button>
+                        </li>
                         <li className={`menu ${menu}`}> 
                             <button className="nav-link"  onClick={()=> this.toggleAbout()}> About </button>
                         </li>
@@ -66,6 +68,7 @@ export class NavBar extends React.Component {
                     <ul className={`about-text contact ${contact}`}>
                                 <li className={`about-text contact ${contact}`}>Giovanni Ricci</li>
                                 <li className={`about-text contact ${contact}`}> mormagli@gmail.com </li>
+                                <li className={`about-text contact ${contact}`}> <a href="https://www.linkedin.com/in/giovanni-ricci">LinkedIn</a> </li>
                     </ul>
                 </nav>
             

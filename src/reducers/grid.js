@@ -203,7 +203,7 @@ export default function reducer(state = initialState, action){
                     [pos2] : state.positions[pos1] }
                 }
             if(didMatch(pos1, pos2, newState)){
-                console.log(pos1, pos2)
+                // console.log(pos1, pos2)
                 return false
             }
         }
